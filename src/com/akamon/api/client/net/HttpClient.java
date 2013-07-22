@@ -2,9 +2,11 @@ package com.akamon.api.client.net;
 
 import com.akamon.api.client.net.error.HttpRequestException;
 import com.akamon.api.client.net.error.InvalidHttpMethodException;
+import com.akamon.api.client.net.error.InvalidHttpUrlException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -63,6 +65,10 @@ public class HttpClient {
            throw new InvalidHttpMethodException(method);
        }
        
+       if (!isValidUrl(url)){
+           throw new InvalidHttpUrlException(url);
+       }
+       
        try {       
             method = method.toUpperCase();
 
@@ -101,6 +107,25 @@ public class HttpClient {
     */
    private boolean isValidHttpMethod(String method){
        return ((method != null) &&  (httpMethods.containsKey(method.toUpperCase())));
+   }
+   
+   private boolean isValidUrl(String url){
+       url = url == null ? "" : url.toLowerCase();
+       
+       if (url.equals("")) return false;
+       
+       if ( (!url.startsWith("http://")) && (!url.startsWith("https://")) ){
+           return false;
+       }
+       
+       try {
+           new URL(url);
+       }
+       catch (Exception e){
+           return false;
+       }
+       
+       return true;
    }
    
    /**

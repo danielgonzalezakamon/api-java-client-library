@@ -1,0 +1,34 @@
+getBonus:
+  code: 7
+  method: POST
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/bonus/user/{user_id}
+  instance: Akamon\ServicesBundle\Services\Bonus\BonusService
+  params:
+    user_id:
+      type: integer
+      required: true
+    bonus:
+      type: string
+      required: true
+    computer_id:
+      type: integer
+      required: true
+    ip:
+      type: string
+      required: false
+    country:
+      type: string
+      required: true
+    canal_id:
+      type: integer
+      required: false
+    game_id:
+      type: integer
+      required: false
+    user_type:
+      type: integer
+      required: false
+    debug:
+      type: integer
+      required: false

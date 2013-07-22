@@ -1,0 +1,15 @@
+userSessionGetContent:
+  service: userSessionGetContent
+  code: 15
+  cache: false
+  time_cache: 30
+  max_request: 30
+  time_request: 30
+  method: GET
+  url: http://dev-api.local.akamon.com/app_dev.php/users/session/{session_id}
+  format: application/json
+  instance: Akamon\ServicesBundle\Services\Users\UsersService
+  params:    
+    session_id:
+      type: string
+      required: true

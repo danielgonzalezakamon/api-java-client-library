@@ -1,0 +1,16 @@
+updateMatch:
+  code: 11
+  method: PUT
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/games/{game_id}/match/{match_id}
+  instance: Akamon\ServicesBundle\Services\Games\GamesService
+  params:
+    game_id:
+      type: integer
+      required: true
+    match_id:
+      type: integer
+      required: true
+    state:
+      type: string
+      regexp: ['/^initiated$|^finished$|^INITIATED$|^FINISHED$/']

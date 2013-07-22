@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.net.error;
 
 /**
- *
+ * Encapsulates an ivalid http request error
  * @author Miguel Angel Garcia
  */
 public class InvalidHttpRequestException extends HttpRequestException  {

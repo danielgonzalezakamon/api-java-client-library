@@ -1,0 +1,10 @@
+getUserChips:
+  code: 9
+  method: GET
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/users/{public_user_id}/chips
+  instance: Akamon\ServicesBundle\Services\Users\UsersService
+  params:
+    public_user_id:
+      type: string
+      required: true

@@ -1,0 +1,16 @@
+purchase:
+  code: 5
+  method: POST
+  format: application/json
+  instance: Akamon\ServicesBundle\Services\Payments\PaymentsService
+  url: http://dev-api.local.akamon.com/app_dev.php/Payments/Purchase/{provider}
+  params:
+    provider:
+      type: string
+      required: true
+    method:
+      type: string
+      required: false
+    additionalParams:
+      type: array
+      required: true

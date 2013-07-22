@@ -1,0 +1,13 @@
+createMatch:
+  code: 10
+  method: POST
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/games/{game_id}/match
+  instance: Akamon\ServicesBundle\Services\Games\GamesService
+  params:
+    game_id:
+      type: integer
+      required: true
+    users:
+      type: array
+      required: true
