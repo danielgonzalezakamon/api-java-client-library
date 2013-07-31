@@ -1,6 +1,8 @@
-package com.akamon.api.client.service;
+package com.akamon.api.client.service.validation;
 
+import com.akamon.api.client.service.validation.ServiceParameterValidator;
 import com.akamon.api.client.error.ServiceInvocationException;
+import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
 import java.util.HashMap;
 import java.util.logging.Level;

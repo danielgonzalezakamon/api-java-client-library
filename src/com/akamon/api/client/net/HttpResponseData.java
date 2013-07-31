@@ -4,7 +4,7 @@ package com.akamon.api.client.net;
  * Class responsible for encapsulating the response obtained from the api rest server
  * @author Miguel Angel Garcia
  */
-class HttpResponseData {
+public class HttpResponseData {
     private int responseCode = 0;
     
     private String responseString = "";

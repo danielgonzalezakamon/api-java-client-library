@@ -1,4 +1,4 @@
-package com.akamon.api.client.service;
+package com.akamon.api.client.service.validation;
 
 import com.akamon.api.client.error.ServiceInvocationException;
 import com.akamon.api.client.service.error.BadParameterTypeException;

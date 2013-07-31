@@ -12,7 +12,7 @@ public interface ICallableService {
      * Get the service code (identifies the operation to call)
      * @return 
      */
-    public String getServideCode();
+    public String getServiceCode();
     
     /**
      * Gets the raw format of the data returned by the invocation call (json, xml, etc)

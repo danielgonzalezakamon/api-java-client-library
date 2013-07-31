@@ -30,7 +30,7 @@ public class JsonCallableResponse extends BaseCallableResponse {
             throw new BadJsonResponseInvocationException(serviceCode, jsonString);
         }  
         
-        setRawData(jsonData.getResponseData());        
+        setResponseData(jsonData.getResponseData());        
     }        
 
     @Override

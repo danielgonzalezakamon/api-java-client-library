@@ -7,9 +7,12 @@ package com.akamon.api.client.error;
 public class BadResponseInvocationException extends ServiceInvocationException {
     private Object rawResponse;
     
-    
     public BadResponseInvocationException(String serviceCode, Object rawResponse){
-        super("Bad response obtained from service " + serviceCode + ": " + (rawResponse == null ? "" : rawResponse.toString()));
+        this(serviceCode, rawResponse, null);        
+    }
+    
+    public BadResponseInvocationException(String serviceCode, Object rawResponse, Throwable t){
+        super("Bad response obtained from service " + serviceCode + ": " + (rawResponse == null ? "" : rawResponse.toString()), t);
         this.rawResponse = rawResponse;
     }
 
