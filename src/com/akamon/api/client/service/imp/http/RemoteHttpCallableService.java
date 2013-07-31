@@ -36,7 +36,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     
     private ServiceConfigManager manager;
     
-    private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");        
+    private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");             
     
     public RemoteHttpCallableService(String serviceCode, AuthData authData) throws ServiceDefinitionException{
         setServiceCode(serviceCode);
@@ -134,13 +134,8 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         ICallableResponse callableResponse = null;
         
         try {                      
-            NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData); 
-            
-            String serviceUrl = getUrl();
-            if ( serviceUrl.indexOf("{") > -1 ){
-                HashMap<String,Object> paramsMap = invocationParamArrayToHashmap(httpParams);
-                serviceUrl = replaceUrlWithRouteParams(serviceUrl, paramsMap);
-            }                        
+            NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
+            String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
             
             HttpClient client = new HttpClient(getAppCode(), getAppToken());
             HttpResponseData response = client.execute(serviceUrl, getHttpMethod(), httpParams);            
@@ -220,18 +215,22 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         return map;
     }
     
-    public String replaceUrlWithRouteParams(String url, HashMap<String,Object> paramsWithKeys){        
+    public String replaceUrlWithRouteParams(String url, NameValuePair[] httpParams){        
         Matcher matcher = paramUrlPattern.matcher(url);
         
         LinkedHashMap<String,String> replaces = new LinkedHashMap();
+        HashMap<String,Object> paramsMap = null;
         
-        while (matcher.find()){            
-            // matcher.group() == "{name}"
+        while (matcher.find()){                        
             String group = matcher.group();
             String paramToReplace = group.substring(1, group.length() - 1);
             
-            if (paramsWithKeys.containsKey(paramToReplace)){
-                replaces.put(paramToReplace,paramsWithKeys.get(paramToReplace).toString());
+            if (paramsMap == null){
+                paramsMap = invocationParamArrayToHashmap(httpParams);
+            }
+            
+            if (paramsMap.containsKey(paramToReplace)){
+                replaces.put(paramToReplace,paramsMap.get(paramToReplace).toString());
             }
         }
         
