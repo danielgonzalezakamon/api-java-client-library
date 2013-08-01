@@ -12,20 +12,8 @@ public interface ICallableService {
      * Get the service code (identifies the operation to call)
      * @return 
      */
-    public String getServiceCode();
+    public String getServiceCode();        
     
-    /**
-     * Gets the raw format of the data returned by the invocation call (json, xml, etc)
-     * @return 
-     */
-    public String getFormat();
-    
-    /**
-     * Validates the service parameters
-     * @param parameters
-     * @return 
-     */
-    public boolean validateServiceParameters(NameValuePair[] parameters);
     
     /**
      * Calls the service

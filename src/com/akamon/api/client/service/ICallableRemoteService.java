@@ -18,4 +18,10 @@ public interface ICallableRemoteService extends ICallableService {
      * @return 
      */
     public String getAppToken();
+    
+    /**
+     * Gets the raw format of the data returned by the invocation call (json, xml, etc)
+     * @return 
+     */
+    public String getFormat();
 }
