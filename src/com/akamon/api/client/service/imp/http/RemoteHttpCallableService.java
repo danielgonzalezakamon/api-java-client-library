@@ -10,6 +10,7 @@ import com.akamon.api.client.service.error.ServiceDefinitionException;
 import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.service.error.BadHttpResponseInvocationException;
 import com.akamon.api.client.service.validation.ServiceValidator;
+import com.akamon.api.client.error.ServiceInvocationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -84,13 +85,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     @Override
     public String getFormat() {
         return this.authData.getFormat();
-    }
-        
-
-    @Override
-    public ICallableResponse invoke(NameValuePair[] parameters) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    }               
 
     /**
      * @param serviceCode the serviceCode to set
@@ -125,7 +120,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         validator.validate(this.getServiceCode(), invokationData);
     }
         
-    
+    @Override
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableResponse callableResponse = null;
         
@@ -180,8 +175,6 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
                 if (++dataIndex < invokationDataLength){
                     paramValue = serializer.serialize(invokationData[dataIndex]);
                 }                                
-                
-                System.out.println(paramName + " = " + (paramValue == null ? null : paramValue));
                 
                 params.add(new BasicNameValuePair(paramName, paramValue == null ? null : paramValue));                
             }  

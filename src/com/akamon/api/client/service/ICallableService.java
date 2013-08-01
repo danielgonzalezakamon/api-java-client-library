@@ -1,6 +1,7 @@
 package com.akamon.api.client.service;
 
-import org.apache.http.NameValuePair;
+import com.akamon.api.client.error.ServiceInvocationException;
+import com.akamon.api.client.service.error.ServiceDefinitionException;
 
 /**
  * Interface modeling a callable service
@@ -20,5 +21,5 @@ public interface ICallableService {
      * @param parameters
      * @return
      */
-    public ICallableResponse invoke(NameValuePair[] parameters);    
+    public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException;
 }
