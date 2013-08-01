@@ -85,10 +85,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     public String getFormat() {
         return this.authData.getFormat();
     }
-    
-    public boolean validateServiceParameters(NameValuePair[] parameters) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+        
 
     @Override
     public ICallableResponse invoke(NameValuePair[] parameters) {
