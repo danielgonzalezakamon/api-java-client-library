@@ -14,8 +14,8 @@ The above command generate two jars in the dist directory:
 
 # Usage
 
-Yo need the two jars (akamon-api-client-base-version.jar and akamon-api-client-proxy-version.jar)
-in your ptoject.
+You need the two jars (akamon-api-client-base-version.jar and akamon-api-client-proxy-version.jar)
+in your project.
 
 The base jar provides you the core funcionaly, and the proxy jar the final classes you 
 are going to use directly in your application.
@@ -40,6 +40,7 @@ Below you can find a complete code example :
    
 > // Initilization only when the program starts     
 > ServiceConfigManager.registerConfigDir("C:/api-java-client-library/service_definitions");
+
 > TestsProxy p = new TestsProxy(new AuthData("app_code","app_token","sha256"));
         
 > SayHelloResponseData res = p.sayHello("Peter");
