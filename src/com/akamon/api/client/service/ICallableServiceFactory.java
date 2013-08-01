@@ -1,6 +1,6 @@
 package com.akamon.api.client.service;
 
-import java.util.HashMap;
+import com.akamon.api.client.service.error.ServiceDefinitionException;
 
 /**
  *
@@ -8,6 +8,6 @@ import java.util.HashMap;
  */
 public interface ICallableServiceFactory {
             
-    public ICallableService loadCallableService(String serviceCode, HashMap <String, Object> additionalParams);
+    public ICallableService loadCallableService(String serviceCode) throws ServiceDefinitionException;
 
 }
