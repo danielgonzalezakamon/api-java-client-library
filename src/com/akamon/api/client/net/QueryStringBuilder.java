@@ -26,7 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -66,7 +66,7 @@ public class QueryStringBuilder {
 
     protected String base;
     protected String sessionid;
-    protected Map<String, NameValuePair> parameters = new HashMap<String, NameValuePair>();
+    protected Map<String, NameValuePair> parameters = new LinkedHashMap<String, NameValuePair>();
     protected boolean override = true;
 
     /**

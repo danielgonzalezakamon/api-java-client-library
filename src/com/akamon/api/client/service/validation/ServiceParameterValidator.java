@@ -139,17 +139,15 @@ public class ServiceParameterValidator {
     private boolean validateType(Object data){
         boolean valid = false;
         
-        switch (type){
-            case "boolean": valid = validateTypeBoolean(data); break;
-            case "integer": valid = validateTypeInteger(data); break;
-            case "float": valid = validateTypeFloat(data); break;
-            case "double": valid = validateTypeDouble(data); break;
-            case "string": valid = true; break;
-            case "array": valid = validateTypeArray(data); break;
-            case "object": valid = true; break;
-            case "email": valid = validateTypeEmail(data); break;
-            case "datetime": validateTypeDatetime(data); break;
-        }
+        if(type.equals("boolean")) valid = validateTypeBoolean(data); 
+        else if(type.equals("integer")) valid = validateTypeInteger(data); 
+        else if(type.equals("float")) valid = validateTypeFloat(data);
+        else if(type.equals("double")) valid = validateTypeDouble(data);
+        else if(type.equals("string")) valid = true;
+        else if(type.equals("array")) valid = validateTypeArray(data);
+        else if(type.equals("object")) valid = true;
+        else if(type.equals("email")) valid = validateTypeEmail(data);
+        else if(type.equals("datetime")) validateTypeDatetime(data);
                 
         return valid;
     }

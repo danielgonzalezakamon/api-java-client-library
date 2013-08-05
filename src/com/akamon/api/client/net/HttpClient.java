@@ -136,22 +136,16 @@ public class HttpClient {
     */
    private Request createHttpRequest(String method, String url){
        Request req = null;
-       
-       switch (method.toUpperCase()){
-           case "GET":
-               req = Request.Get(url);
-               break;
-           case "POST":
-               req = Request.Post(url);
-               break;
-           case "PUT":
-               req = Request.Put(url);
-               break;
-           case "DELETE":
-               req = Request.Delete(url);
-               break;
-       }
-       
+       method = method.toUpperCase();
+       if(method.equals("GET"))
+    	   req = Request.Get(url);
+       else if(method.equals("POST"))
+    	   req = Request.Post(url);
+       else if(method.equals("PUT"))
+    	   req = Request.Put(url);
+       else if(method.equals("DELETE"))
+    	   req = Request.Delete(url);
+      
        return req;
    }
    
