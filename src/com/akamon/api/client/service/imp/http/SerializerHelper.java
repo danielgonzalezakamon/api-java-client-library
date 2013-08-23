@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- *
+ * Object responsible for managing the data conversion before the http invocation
  * @author Miguel Angel Garcia
  */
 public class SerializerHelper {

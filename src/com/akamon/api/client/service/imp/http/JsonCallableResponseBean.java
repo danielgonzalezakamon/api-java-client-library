@@ -1,15 +1,7 @@
 package com.akamon.api.client.service.imp.http;
 
-/***
- * 
- *  {
-    "errorCode" : 0,
-    "errorString": "",
-    "responseData" : {"session_id":"8e1f1c9fb5446729b6d8fbea3a4eef8a"}}
-*/
-
 /**
- *
+ * Bean to hold the json response obtained from server
  * @author Miguel Angel Garcia
  */
 public class JsonCallableResponseBean {

@@ -22,7 +22,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
- *
+ * Callable service (http based services)
  * @author Miguel Angel Garcia
  */
 public class RemoteHttpCallableService implements IRemoteHttpCallableService {
@@ -39,6 +39,12 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     
     private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");             
     
+    /**
+     * Builds the object
+     * @param serviceCode Operation service code
+     * @param authData Authentication data object
+     * @throws ServiceDefinitionException 
+     */
     public RemoteHttpCallableService(String serviceCode, AuthData authData) throws ServiceDefinitionException{
         setServiceCode(serviceCode);
         setAuthData(authData);
@@ -57,31 +63,55 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         }        
     }
     
+    /**
+     * Gets the service url
+     * @return Service url
+     */
     @Override
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Gets the service http method
+     * @return 
+     */
     @Override
     public String getHttpMethod() {
         return this.httpMethod;
     }
 
+    /**
+     * Gets the public client id
+     * @return 
+     */
     @Override
     public String getAppCode() {
         return this.authData.getAppCode();
     }
 
+    /**
+     * Gets the private client data used to perform the signature
+     * @return 
+     */
     @Override
     public String getAppToken() {
         return this.authData.getAppToken();
     }
 
+    /**
+     * Gets the operation service code
+     * @return 
+     */
     @Override
     public String getServiceCode() {
         return this.serviceCode;
     }
 
+    /**
+     * Gest the signature algorithm
+     * @return 
+     */
     @Override
     public String getFormat() {
         return this.authData.getFormat();
@@ -115,11 +145,24 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         this.url = url;
     }
     
+    /**
+     * Validates the request parameters
+     * @param invokationData Data to send with the request
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
     private void validateServiceParameters(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ServiceValidator validator = new ServiceValidator();
         validator.validate(this.getServiceCode(), invokationData);
     }
-        
+    
+    /**
+     * Performs the http invokation
+     * @param invokationData Data to send with the request
+     * @return Response obtained from server
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
     @Override
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableResponse callableResponse = null;
@@ -154,6 +197,13 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         return callableResponse;    
     }
     
+    /**
+     * Builds the parameters data structure needed to make the remote call
+     * @param invokationData Data to send with the request
+     * @return 
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
     private NameValuePair[] buildHttpInvokationParameters(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
          NameValuePair[] httpParams = null;
         
@@ -194,6 +244,11 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         return httpParams;
     }
     
+    /**
+     * Converts the parameter data from invocation format to hashmap format
+     * @param httpParams
+     * @return 
+     */
     private HashMap<String,Object> invocationParamArrayToHashmap(NameValuePair[] httpParams){
         LinkedHashMap<String,Object> map = new LinkedHashMap();
         
@@ -204,6 +259,14 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         return map;
     }
     
+    /**
+     * Replaces all the parameter marked in the url with the right values. The parameters
+     * must be marked in the url with the sintax: {parameter_name). 
+     * For example: http://api.akamon.com/../{param_1}/.../{param_2} 
+     * @param url Invocation url
+     * @param httpParams Params to performe the substitution
+     * @return Final valid url
+     */
     public String replaceUrlWithRouteParams(String url, NameValuePair[] httpParams){        
         Matcher matcher = paramUrlPattern.matcher(url);
         
