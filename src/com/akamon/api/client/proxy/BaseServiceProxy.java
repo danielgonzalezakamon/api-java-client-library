@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
- *
+ * Base class to implement the operation proxy objects
  * @author Miguel Angel Garcia
  */
 public abstract class BaseServiceProxy {
