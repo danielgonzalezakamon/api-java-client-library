@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.service;
 
 import com.akamon.api.client.service.error.InvalidServiceDefinitionFileException;
@@ -14,7 +10,8 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 /**
- *
+ * Class to manage loading the service config data.
+ * Important: you <b>must</b> call to registerConfigDir() at the beggining of your application
  * @author Miguel Angel Garcia
  */
 public class ServiceConfigManager {            
@@ -25,16 +22,27 @@ public class ServiceConfigManager {
         reloadAllServiceConfigurationManagers();
     }
     
+    /**
+     * Invalidates all the service config data
+     */
     public static void reloadAllServiceConfigurationManagers(){
         ServiceConfigManager.configManagers = new HashMap<String,ServiceConfigManager>();
     }
     
+    /**
+     * Reload the loaded config, data but only for the serviceCode operation
+     * @param serviceCode Operation service code to reload its data
+     */
     public static void reloadServiceConfigurationManager(String serviceCode){
         if (ServiceConfigManager.configManagers.containsKey(serviceCode)){
             ServiceConfigManager.configManagers.remove(serviceCode);
         }
     }
     
+    /**
+     * Adds a configuration manager, to handle the data for a specific serviceCode operation
+     * @param manager 
+     */
     private static void addServiceConfigurationManager(ServiceConfigManager manager){
         if (manager != null){
             ServiceConfigManager.reloadServiceConfigurationManager(manager.getServiceCode());
@@ -42,6 +50,11 @@ public class ServiceConfigManager {
         }
     }
     
+    /**
+     * Gets the right manager to handle the configuration data for the serviceCode operation
+     * @param serviceCode Operation service code
+     * @return 
+     */
     private static ServiceConfigManager getServiceConfigurationManager(String serviceCode){
         ServiceConfigManager manager = null;
         
@@ -52,14 +65,28 @@ public class ServiceConfigManager {
         return manager;
     }
     
+    /**
+     * Gets the conf directory (where are the config data files)
+     * @return conf directory 
+     */
     public static String getConfigDir(){
         return configDir;
     }
     
+    /**
+     * Sets the conf directory (where are the config data files)
+     * @param configDir conf directory
+     */
     public static void registerConfigDir(String configDir){
         ServiceConfigManager.configDir = configDir;
     }        
     
+    /**
+     * <<Singleton>> Loads a new instance of the class
+     * @param serviceCode Operation service code
+     * @return A new config manager
+     * @throws ServiceDefinitionException 
+     */
     public static ServiceConfigManager newInstance(String serviceCode) throws ServiceDefinitionException {
         
         ServiceConfigManager manager = ServiceConfigManager.getServiceConfigurationManager(serviceCode);                
@@ -76,6 +103,12 @@ public class ServiceConfigManager {
     private String serviceCode = null;
     private Map<String, Object> fileContent = null;
     
+    /**
+     * Builds the object
+     * @param serviceCode Operation service code
+     * @param dir Directory where the config files are
+     * @throws ServiceDefinitionException 
+     */
     private ServiceConfigManager(String serviceCode, String dir) throws ServiceDefinitionException {
         this.serviceCode = serviceCode;
         this.dir = dir;
@@ -112,6 +145,12 @@ public class ServiceConfigManager {
         return serviceCode;
     }
     
+    /**
+     * Loads the config data from file
+     * @param serviceCode Operation service code
+     * @return Config data
+     * @throws ServiceDefinitionException 
+     */
     private Map<String, Object> loadYmlConfigFile(String serviceCode) throws ServiceDefinitionException {
         String fichero = "";
         try {
@@ -127,10 +166,20 @@ public class ServiceConfigManager {
         }
     }
     
+    /**
+     * Generates the path to the right config file
+     * @param serviceCode
+     * @return 
+     */
     private String builRouteToConfigFile(String serviceCode){
         return this.dir + java.io.File.separator + serviceCode + ".yml";
     }
     
+    /**
+     * Gets the value for the given config key
+     * @param key
+     * @return 
+     */
     public Object getConfigParameter(String key) {
         Object param = null;
         
