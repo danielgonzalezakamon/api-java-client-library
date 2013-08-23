@@ -4,7 +4,6 @@ import com.akamon.api.client.error.ServiceInvocationException;
 import com.akamon.api.client.proxy.BaseServiceProxy;
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ICallableResponse;
-import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
 import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import com.google.gson.internal.LinkedTreeMap;
