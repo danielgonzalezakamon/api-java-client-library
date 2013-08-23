@@ -1,7 +1,7 @@
 package com.akamon.api.client.security;
 
 /**
- *
+ * Class used to hold the required auth data to communicate with the server
  * @author Miguel Angel Garcia
  */
 public class AuthData {
@@ -12,6 +12,12 @@ public class AuthData {
     
     private String format;
     
+    /**
+     * Builds the object
+     * @param appCode Public client identifier
+     * @param appToken Private key
+     * @param format Signature format
+     */
     public AuthData(String appCode, String appToken, String format){
         setAppCode(appCode);
         setAppToken(appToken);
