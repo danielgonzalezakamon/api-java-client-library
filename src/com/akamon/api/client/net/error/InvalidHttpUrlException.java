@@ -1,23 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.net.error;
 
 /**
- *
+ * Encapsulates an error produced by an inavlid http url
  * @author Miguel Angel Garcia
  */
 public class InvalidHttpUrlException extends HttpRequestException {
      
     private String url;
     
+    /**
+     * Builds the exception
+     * @param url Invalid url
+     */
     public InvalidHttpUrlException(String url){
          super("Invalid url " + url);
          setUrl(url);
      }    
 
     /**
+     * Gets the url
      * @return the url
      */
     public String getUrl() {
@@ -25,6 +26,7 @@ public class InvalidHttpUrlException extends HttpRequestException {
     }
 
     /**
+     * Sets the url
      * @param url the url to set
      */
     private void setUrl(String url) {
