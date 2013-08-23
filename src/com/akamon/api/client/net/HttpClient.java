@@ -109,6 +109,11 @@ public class HttpClient {
        return ((method != null) &&  (httpMethods.containsKey(method.toUpperCase())));
    }
    
+   /**
+    * Returns true if the url method is valid
+    * @param url The url to validate
+    * @return true if the url is valid
+    */
    private boolean isValidUrl(String url){
        url = url == null ? "" : url.toLowerCase();
        
@@ -131,8 +136,8 @@ public class HttpClient {
    /**
     * Creates a request object
     * @param method Http method 
-    * @param url
-    * @return 
+    * @param url Url to call
+    * @return Request obtained from the server
     */
    private Request createHttpRequest(String method, String url){
        Request req = null;
@@ -151,9 +156,9 @@ public class HttpClient {
    
    /**
     * Calculates the right sign for the operation
-    * @param params
-    * @param ts
-    * @return Sign
+    * @param params Request parameters
+    * @param ts Timestamp for the request
+    * @return Sign String with the rigt signatuire to send with the request
     * @throws UnsupportedEncodingException
     * @throws NoSuchAlgorithmException
     * @throws InvalidKeyException 
