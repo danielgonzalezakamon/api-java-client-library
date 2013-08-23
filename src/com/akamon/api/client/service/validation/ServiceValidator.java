@@ -9,11 +9,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Validates all the parameters for a service invocation
  * @author Miguel Angel Garcia
  */
 public class ServiceValidator {
             
+    /**
+     * Validates all the parameters for a service invocation
+     * @param serviceCode Operation service code
+     * @param data Invokation data
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
     public void validate(String serviceCode, Object[] data) throws ServiceDefinitionException, ServiceInvocationException {
         try {
             ServiceParameterValidator validator = new ServiceParameterValidator(serviceCode);

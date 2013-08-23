@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Service parameter validator utility 
  * @author Miguel Angel Garcia
  */
 public class ServiceParameterValidator {
@@ -28,7 +28,10 @@ public class ServiceParameterValidator {
     
     private SimpleDateFormat sdf = null;
         
-
+    /**
+     * Builds the vaidator
+     * @param serviceCode 
+     */
     public ServiceParameterValidator(String serviceCode){
         this.serviceCode = serviceCode;
     }
@@ -47,6 +50,13 @@ public class ServiceParameterValidator {
         this.serviceCode = serviceCode;
     }
      
+    /**
+     * Performs the validation
+     * @param parameter Parameter name
+     * @param value Parameter value
+     * @param parameterDefinition Parameter definition
+     * @throws ServiceInvocationException 
+     */
     public  void validate(String parameter, Object value, HashMap<String,Object> parameterDefinition) throws ServiceInvocationException{   
         
         try {
@@ -62,7 +72,13 @@ public class ServiceParameterValidator {
         }       
     }
         
-    
+    /**
+     * Validates (real work)
+     * @param parameter Parameter name
+     * @param value Parameter value
+     * @param parameterDefinition
+     * @throws Exception Parameter definition
+     */
     public void validateWork(String parameter, Object value, HashMap<String,Object> parameterDefinition) throws Exception {
         initValidationData(parameterDefinition);
         
@@ -88,6 +104,10 @@ public class ServiceParameterValidator {
         
     }
     
+    /**
+     * Initializes the validation data
+     * @param parameterDefinition
+     */
     private void initValidationData(HashMap<String,Object> parameterDefinition){
         this.type = "string";
         this.required = false;
@@ -126,6 +146,11 @@ public class ServiceParameterValidator {
         }                        
     }
     
+    /**
+     * Converts the regular expression into a valid java format
+     * @param phpRegexp
+     * @return 
+     */
     private String phpRegexpToJavaRegexp(String phpRegexp){        
         String jregexp = phpRegexp;
         
@@ -136,6 +161,11 @@ public class ServiceParameterValidator {
         return jregexp;
     }
     
+    /**
+     * Validates the parameter value's type
+     * @param data
+     * @return 
+     */
     private boolean validateType(Object data){
         boolean valid = false;
         
@@ -152,10 +182,20 @@ public class ServiceParameterValidator {
         return valid;
     }
     
+    /**
+     * Boolean parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeBoolean(Object data){
         return data instanceof Boolean;
     }
     
+    /**
+     * Integer parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeInteger(Object data){
         boolean valid = false;
 
@@ -172,6 +212,11 @@ public class ServiceParameterValidator {
         return valid;
     }
     
+    /**
+     * FLoat parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeFloat(Object data){
         boolean valid = data instanceof Float;
 
@@ -185,6 +230,11 @@ public class ServiceParameterValidator {
         return valid;
     }
     
+    /**
+     * Double parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeDouble(Object data){
         boolean valid = data instanceof Double;
 
@@ -201,14 +251,32 @@ public class ServiceParameterValidator {
         return valid;
     }
     
+    /**
+     * Array parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeArray(Object data){
         return data instanceof Object[];
     }
     
+    /**
+     * Email parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeEmail(Object data){                
         return validateRegexp(java.util.regex.Pattern.compile(".+@.+\\.[a-z]+"), data.toString());
     }
     
+    /**
+     * Validates that a parameter pass all the regular expressions
+     * @param regexps
+     * @param expression
+     * @param parameter
+     * @param value
+     * @throws ParameterInvalidRegexpFormatException 
+     */
     private void validateAllRegexp(List<String> regexps, String expression, String parameter, Object value) throws ParameterInvalidRegexpFormatException{        
         for (String regexp : regexps){
             Pattern p = java.util.regex.Pattern.compile(regexp);
@@ -218,11 +286,22 @@ public class ServiceParameterValidator {
         }                
     }
     
+    /**
+     * Validates the expression againsta regular expression
+     * @param p
+     * @param expression
+     * @return 
+     */
     private boolean validateRegexp(Pattern p, String expression){
         java.util.regex.Matcher m = p.matcher(expression);
         return m.matches();
     }
     
+    /**
+     * Date time  parameter data type validation
+     * @param data
+     * @return 
+     */
     private boolean validateTypeDatetime(Object data){
         boolean valid = data instanceof java.util.Date;
         
@@ -236,7 +315,10 @@ public class ServiceParameterValidator {
         return valid;
     }
     
-    
+    /**
+     * Gets the date formatter
+     * @return 
+     */
     private SimpleDateFormat getDateFormater(){
         if (this.sdf == null){
             this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -3,7 +3,7 @@ package com.akamon.api.client.util;
 import com.google.gson.Gson;
 
 /**
- *
+ * Utility to handle the goole json library (gson)
  * @author Miguel Angel Garcia
  */
 public class JsonUtility {
