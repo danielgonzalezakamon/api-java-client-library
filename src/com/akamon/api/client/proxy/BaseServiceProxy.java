@@ -29,7 +29,7 @@ public abstract class BaseServiceProxy {
         serviceFactory = new CallableServiceFactory(factoryOptions);        
     }
     
-    protected ICallableResponse invoke(String serviceCode, Object[] parameters) throws ServiceDefinitionException, ServiceInvocationException{
+    public ICallableResponse invoke(String serviceCode, Object[] parameters) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableService service = this.serviceFactory.loadCallableService(serviceCode);
         
         return service.invoke(parameters);
@@ -39,6 +39,7 @@ public abstract class BaseServiceProxy {
         final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
         
         return ste[ste.length - 2].getMethodName();
-    }
+    }        
+            
     
 }
