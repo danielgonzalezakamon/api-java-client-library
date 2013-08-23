@@ -1,7 +1,7 @@
 package com.akamon.api.client.proxy.tests;
 
 /**
- *
+ * Bean to encapsulate the response obtained from server to the operation sayHello
  * @author Miguel Angel Garcia
  */
 public class SayHelloResponseData {

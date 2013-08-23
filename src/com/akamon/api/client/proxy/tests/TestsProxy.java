@@ -9,7 +9,7 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import com.google.gson.internal.LinkedTreeMap;
 
 /**
- *
+ * Proxy object to invoke the test operations
  * @author Miguel Angel Garcia
  */
 public class TestsProxy extends BaseServiceProxy {  
