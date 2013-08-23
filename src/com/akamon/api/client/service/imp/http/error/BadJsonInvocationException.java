@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.service.imp.http.error;
 
 /**
- *
+ * Error encapsulation a bad invocation on a json service
  * @author Miguel Angel Garcia
  */
 public class BadJsonInvocationException {
