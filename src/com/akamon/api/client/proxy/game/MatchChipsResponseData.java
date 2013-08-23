@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.proxy.game;
 
 /**
- *
+ * Bean to encaosulate the response obtained from server to the matchChips operation
  * @author Miguel Angel Garcia
  */
 public class MatchChipsResponseData {

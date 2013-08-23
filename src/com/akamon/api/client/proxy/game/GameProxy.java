@@ -9,7 +9,7 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import com.google.gson.internal.LinkedTreeMap;
 
 /**
- *
+ * Proxy object to invoke the game operations
  * @author Miguel Angel Garcia
  */
 public class GameProxy extends BaseServiceProxy { 
