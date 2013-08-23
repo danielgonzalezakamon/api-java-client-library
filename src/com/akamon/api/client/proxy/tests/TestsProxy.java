@@ -12,8 +12,8 @@ import com.google.gson.internal.LinkedTreeMap;
  *
  * @author Miguel Angel Garcia
  */
-public class TestsProxy extends BaseServiceProxy {       
-    
+public class TestsProxy extends BaseServiceProxy {  
+                         
     public TestsProxy(AuthData authData){
         super(authData);
     }
@@ -25,9 +25,10 @@ public class TestsProxy extends BaseServiceProxy {
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
-    public SayHelloResponseData sayHello(Object... params) throws ServiceDefinitionException, ServiceInvocationException  {
+    public SayHelloResponseData sayHello(String name) throws ServiceDefinitionException, ServiceInvocationException  {
         SayHelloResponseData sayHelloRes = null;
       
+        Object[] params = {name};
         ICallableResponse res = invoke(getCallerMethodName(), params);
         if (res instanceof JsonCallableResponse){
             JsonCallableResponse jRes = (JsonCallableResponse) res;
