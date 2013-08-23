@@ -18,7 +18,7 @@ public class BadResponseInvocationException extends ServiceInvocationException {
     
     /**
      * Builds the exception
-     * @param serviceCode Operation servicecode
+     * @param serviceCode Operation service code
      * @param rawResponse Bad response obtained from the server
      * @param t Previous generated error
      */

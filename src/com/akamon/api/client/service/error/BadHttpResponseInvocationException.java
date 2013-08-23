@@ -1,23 +1,32 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.service.error;
 
 import com.akamon.api.client.error.BadResponseInvocationException;
 
 /**
- *
+ * Encapsulates an error for a bad http response obtained from server
  * @author Miguel Angel Garcia
  */
 public class BadHttpResponseInvocationException extends BadResponseInvocationException
 {
     private int httpResponseCode = 0;
     
+    /**
+     * Buils the exception
+     * @param serviceCode Operation service code
+     * @param rawResponse Raw response obtained from server
+     * @param httpResponseCode http response code
+     */
     public BadHttpResponseInvocationException(String serviceCode, String rawResponse, int httpResponseCode){
         this(serviceCode, rawResponse, httpResponseCode, null);
     }
     
+    /**
+     * Buils the exception
+     * @param serviceCode Operation service code
+     * @param rawResponse Raw response obtained from server
+     * @param httpResponseCode http response code
+     * @param t Previous generated error
+     */
     public BadHttpResponseInvocationException(String serviceCode, String rawResponse, int httpResponseCode, Throwable t){
         super(serviceCode, rawResponse, t);
         
