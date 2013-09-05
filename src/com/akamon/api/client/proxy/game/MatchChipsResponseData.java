@@ -17,7 +17,7 @@ public class MatchChipsResponseData {
     }
 
     /**
-     * @param public_user_id the public_user_id to set
+     * @param publicUserId the public_user_id to set
      */
     public void setPublicUserId(String publicUserId) {
         this.public_user_id = publicUserId;

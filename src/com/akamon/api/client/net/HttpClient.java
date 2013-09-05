@@ -227,7 +227,7 @@ public class HttpClient {
    /**
     * Gets the unix timestamp, int the GMT timezone, for the given date
     * @param date
-    * @return 
+    * @return Timestamp in UNIX format (seconds from 1970-01-01 to date)
     */
    private int getUtcTimestamp(Date date){
         Calendar c = Calendar.getInstance();

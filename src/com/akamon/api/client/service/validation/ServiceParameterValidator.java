@@ -148,8 +148,8 @@ public class ServiceParameterValidator {
     
     /**
      * Converts the regular expression into a valid java format
-     * @param phpRegexp
-     * @return 
+     * @param phpRegexp Regular expression
+     * @return Java compatible regular expression
      */
     private String phpRegexpToJavaRegexp(String phpRegexp){        
         String jregexp = phpRegexp;
@@ -163,8 +163,8 @@ public class ServiceParameterValidator {
     
     /**
      * Validates the parameter value's type
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateType(Object data){
         boolean valid = false;
@@ -184,8 +184,8 @@ public class ServiceParameterValidator {
     
     /**
      * Boolean parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeBoolean(Object data){
         return data instanceof Boolean;
@@ -193,8 +193,8 @@ public class ServiceParameterValidator {
     
     /**
      * Integer parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeInteger(Object data){
         boolean valid = false;
@@ -214,8 +214,8 @@ public class ServiceParameterValidator {
     
     /**
      * FLoat parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeFloat(Object data){
         boolean valid = data instanceof Float;
@@ -232,8 +232,8 @@ public class ServiceParameterValidator {
     
     /**
      * Double parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeDouble(Object data){
         boolean valid = data instanceof Double;
@@ -253,8 +253,8 @@ public class ServiceParameterValidator {
     
     /**
      * Array parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeArray(Object data){
         return data instanceof Object[];
@@ -262,8 +262,8 @@ public class ServiceParameterValidator {
     
     /**
      * Email parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeEmail(Object data){                
         return validateRegexp(java.util.regex.Pattern.compile(".+@.+\\.[a-z]+"), data.toString());
@@ -288,9 +288,9 @@ public class ServiceParameterValidator {
     
     /**
      * Validates the expression againsta regular expression
-     * @param p
-     * @param expression
-     * @return 
+     * @param p Pattern to check
+     * @param expression Expression to validate
+     * @return True if is valid
      */
     private boolean validateRegexp(Pattern p, String expression){
         java.util.regex.Matcher m = p.matcher(expression);
@@ -299,8 +299,8 @@ public class ServiceParameterValidator {
     
     /**
      * Date time  parameter data type validation
-     * @param data
-     * @return 
+     * @param data Data to validate
+     * @return True if is valid
      */
     private boolean validateTypeDatetime(Object data){
         boolean valid = data instanceof java.util.Date;
@@ -317,7 +317,7 @@ public class ServiceParameterValidator {
     
     /**
      * Gets the date formatter
-     * @return 
+     * @return Api date formater
      */
     private SimpleDateFormat getDateFormater(){
         if (this.sdf == null){

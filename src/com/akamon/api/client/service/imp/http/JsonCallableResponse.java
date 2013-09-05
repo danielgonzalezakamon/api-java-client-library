@@ -60,37 +60,7 @@ public class JsonCallableResponse extends BaseCallableResponse {
     @Override
     public String getErrorString() {
         return jsonData == null ? "" : jsonData.getErrorString();
-    }
-    
-    /**
-     * Gets an integer vaur from the obtained response (sometimes the value can be 
-     * in string or double format,so this method encaopsulates the right
-     * data type conversion)
-     * @param key Parameter name
-     * @return 
-     */
-    public Integer getResponseIntegerValue(String key) {
-        Object oResponseData = getResponseData();
-        Integer value = null;
-
-        if (oResponseData instanceof LinkedTreeMap) {
-            LinkedTreeMap data = (LinkedTreeMap) getResponseData();
-            if (data.containsKey(key)) {
-                Object oMatch = data.get(key);
-
-                if (oMatch != null) {
-                    if (oMatch instanceof Double) {
-                        value = ((Double) oMatch).intValue();
-                    } else if (oMatch instanceof Integer) {
-                        value = (Integer) oMatch;
-                    } else {
-                        value = Integer.parseInt(data.get(key).toString());
-                    }
-                }
-            }
-        }
-        return value;
-    }
+    }        
     
     /**
      * Parses and builds the specific response data object     

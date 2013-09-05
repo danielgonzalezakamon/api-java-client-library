@@ -13,8 +13,8 @@ public class SerializerHelper {
     
     /**
      * Serializes the given data in a way the akamon service can understand
-     * @param Object data Data to serialize
-     * @return The serialized ata
+     * @param data Data to serialize
+     * @return The serialized data
      */
     public String serialize(Object data){
         String serialized = "";

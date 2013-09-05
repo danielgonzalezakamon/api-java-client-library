@@ -30,7 +30,7 @@ public abstract class BaseCallableResponse implements ICallableResponse {
     
     /**
      * Sets the raw data obtained from server
-     * @param raw data obtained from server
+     * @param rawData data obtained from server
      */
     protected void setRawData(Object rawData){
         this.rawData = rawData;

@@ -53,7 +53,7 @@ public class ServiceConfigManager {
     /**
      * Gets the right manager to handle the configuration data for the serviceCode operation
      * @param serviceCode Operation service code
-     * @return 
+     * @return The service config manager to handle the config for the service
      */
     private static ServiceConfigManager getServiceConfigurationManager(String serviceCode){
         ServiceConfigManager manager = null;
@@ -169,7 +169,7 @@ public class ServiceConfigManager {
     /**
      * Generates the path to the right config file
      * @param serviceCode
-     * @return 
+     * @return Generates the expected route to load the service config data
      */
     private String builRouteToConfigFile(String serviceCode){
         return this.dir + java.io.File.separator + serviceCode + ".yml";
@@ -178,7 +178,7 @@ public class ServiceConfigManager {
     /**
      * Gets the value for the given config key
      * @param key
-     * @return 
+     * @return Config parameter data
      */
     public Object getConfigParameter(String key) {
         Object param = null;

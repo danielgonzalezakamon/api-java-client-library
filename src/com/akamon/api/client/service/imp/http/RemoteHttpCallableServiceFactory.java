@@ -24,7 +24,7 @@ public class RemoteHttpCallableServiceFactory implements ICallableServiceFactory
     /**
      * Loads a proxy object to call the service code serviceCode
      * @param serviceCode Operation service code
-     * @return
+     * @return Loaded service caller
      * @throws ServiceDefinitionException 
      */
     @Override

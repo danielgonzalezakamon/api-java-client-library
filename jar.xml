@@ -4,6 +4,7 @@
     <property name="build" value="build"/>
     <property name="lib"   value="lib"/>
     <property name="dist"  value="dist"/>
+    <property name="doc"  value="doc"/>
     
     <property name="version_base"  value="0.1"/>
     <property name="version_proxy"  value="0.1"/>
@@ -63,4 +64,9 @@
     </target>
     
     <target name="distribute" depends="distribute-base,distribute-proxy" />   
+    
+    <target name="javadoc" depends="compile">
+        <mkdir dir="${doc}"/>
+        <javadoc sourcepath="${src}" destdir="${doc}"/>
+    </target>
 </project>

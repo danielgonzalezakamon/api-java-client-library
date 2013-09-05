@@ -275,11 +275,11 @@ public class QueryStringBuilder {
 
 
     /**
-     * Returns the {@link NameValuePair} parameter associated with the given
+     * Returns the NameValuePair parameter associated with the given
      * name.
      *
-     * @param name
-     *            the name of the parameter
+     * @param name The name of the parameter
+     * @return NameValurPair of key name
      */
     public NameValuePair getQueryParameter(final String name) {
         return this.parameters.get(name);

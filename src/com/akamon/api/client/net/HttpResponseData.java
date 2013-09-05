@@ -21,7 +21,7 @@ public class HttpResponseData {
     
     /**
      * Gets the http response code
-     * @return 
+     * @return Response code
      */
     public int getResponseCode(){
         return responseCode;
@@ -29,7 +29,7 @@ public class HttpResponseData {
     
     /**
      * Gets the response content retrieved from the server
-     * @return 
+     * @return Response content retrieved from the server
      */
     public String getResponseString(){
         return responseString;

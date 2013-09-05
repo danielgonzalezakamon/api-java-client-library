@@ -74,7 +74,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
 
     /**
      * Gets the service http method
-     * @return 
+     * @return Http method (GET, POST, PUT, DELETE, ..)
      */
     @Override
     public String getHttpMethod() {
@@ -83,7 +83,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
 
     /**
      * Gets the public client id
-     * @return 
+     * @return Public client identifier
      */
     @Override
     public String getAppCode() {
@@ -92,7 +92,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
 
     /**
      * Gets the private client data used to perform the signature
-     * @return 
+     * @return Private client token
      */
     @Override
     public String getAppToken() {
@@ -101,7 +101,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
 
     /**
      * Gets the operation service code
-     * @return 
+     * @return Service to call identifier
      */
     @Override
     public String getServiceCode() {
@@ -110,7 +110,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
 
     /**
      * Gest the signature algorithm
-     * @return 
+     * @return Signature algorithm
      */
     @Override
     public String getFormat() {
@@ -200,7 +200,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     /**
      * Builds the parameters data structure needed to make the remote call
      * @param invokationData Data to send with the request
-     * @return 
+     * @return Http parameters as a NameValuePair, to use with the apache HttpClient library 
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
@@ -247,7 +247,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     /**
      * Converts the parameter data from invocation format to hashmap format
      * @param httpParams
-     * @return 
+     * @return Parameters as a key-values HashMap object
      */
     private HashMap<String,Object> invocationParamArrayToHashmap(NameValuePair[] httpParams){
         LinkedHashMap<String,Object> map = new LinkedHashMap();

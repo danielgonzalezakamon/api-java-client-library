@@ -11,15 +11,15 @@ public interface ICallableService {
     
     /**
      * Get the service code (identifies the operation to call)
-     * @return 
+     * @return Service code (identifies the operation to call)
      */
     public String getServiceCode();        
     
     
     /**
      * Calls the service
-     * @param parameters
-     * @return
+     * @param invokationData Invocation parameters
+     * @return Encapsulated response obtained from server
      */
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException;
 }

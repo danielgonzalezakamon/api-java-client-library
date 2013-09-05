@@ -1,0 +1,14 @@
+com.akamon.api.client.async
+com.akamon.api.client.error
+com.akamon.api.client.net
+com.akamon.api.client.net.error
+com.akamon.api.client.proxy
+com.akamon.api.client.proxy.game
+com.akamon.api.client.proxy.tests
+com.akamon.api.client.security
+com.akamon.api.client.service
+com.akamon.api.client.service.error
+com.akamon.api.client.service.imp.http
+com.akamon.api.client.service.imp.http.error
+com.akamon.api.client.service.validation
+com.akamon.api.client.util
