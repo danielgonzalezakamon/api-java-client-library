@@ -90,7 +90,7 @@ Object[] params = {"Mike"}; // Parameters for the call. Notice it has to be cohe
 String extraData = "invocacion1"; // Optional extra data that will be passed to the listener
 
 // Create the async client
-AsyncInvocationClient asyncClient = new AsyncInvocationClient(proxy, "sayHello", p, listener, extraData);
+AsyncInvocationClient asyncClient = new AsyncInvocationClient(proxy, "sayHello", params, listener, extraData);
 
 // Start the thread. When it finishes, you'll be notified in your listener class
 asyncClient.start();
