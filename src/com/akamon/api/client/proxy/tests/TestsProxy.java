@@ -13,14 +13,14 @@ import com.google.gson.internal.LinkedTreeMap;
  * @author Miguel Angel Garcia
  */
 public class TestsProxy extends BaseServiceProxy {  
-                         
+
     public TestsProxy(AuthData authData){
         super(authData);
     }
     
     /**
      * Says hello (for testing purposes)
-     * @param String name
+     * @param name
      * @return SayHelloResponseData
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
@@ -29,7 +29,8 @@ public class TestsProxy extends BaseServiceProxy {
         SayHelloResponseData sayHelloRes = null;
       
         Object[] params = {name};
-        ICallableResponse res = invoke(getCallerMethodName(), params);
+        ICallableResponse res = invoke("sayHello", params);
+
         if (res instanceof JsonCallableResponse){
             JsonCallableResponse jRes = (JsonCallableResponse) res;
             LinkedTreeMap data = (LinkedTreeMap) jRes.getResponseData();

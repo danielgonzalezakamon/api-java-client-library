@@ -33,13 +33,5 @@ public abstract class BaseServiceProxy {
         ICallableService service = this.serviceFactory.loadCallableService(serviceCode);
         
         return service.invoke(parameters);
-    }
-    
-    protected String getCallerMethodName(){
-        final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-        
-        return ste[ste.length - 2].getMethodName();
-    }        
-            
-    
+    }            
 }
