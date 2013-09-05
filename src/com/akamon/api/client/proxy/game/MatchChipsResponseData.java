@@ -5,22 +5,22 @@ package com.akamon.api.client.proxy.game;
  * @author Miguel Angel Garcia
  */
 public class MatchChipsResponseData {
-    private String publicUserId = null;
+    private String public_user_id = null;
     
     private Integer chips = null;
 
     /**
-     * @return the publicUserId
+     * @return the public_user_id
      */
     public String getPublicUserId() {
-        return publicUserId;
+        return public_user_id;
     }
 
     /**
-     * @param publicUserId the publicUserId to set
+     * @param public_user_id the public_user_id to set
      */
     public void setPublicUserId(String publicUserId) {
-        this.publicUserId = publicUserId;
+        this.public_user_id = publicUserId;
     }
 
     /**

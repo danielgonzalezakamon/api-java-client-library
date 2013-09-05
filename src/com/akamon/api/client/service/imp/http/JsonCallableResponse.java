@@ -3,7 +3,11 @@ package com.akamon.api.client.service.imp.http;
 import com.akamon.api.client.service.BaseCallableResponse;
 import com.akamon.api.client.service.imp.http.error.BadJsonResponseInvocationException;
 import com.akamon.api.client.util.JsonUtility;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that encapsulates a json response obtained from the rest api service
@@ -86,6 +90,21 @@ public class JsonCallableResponse extends BaseCallableResponse {
             }
         }
         return value;
+    }
+    
+    /**
+     * Parses and builds the specific response data object     
+     * @param destinationClass Class of the right response object
+     * @return Response object
+     */
+    public <T>T buildResponseDataObject(Class <? extends T> destinationClass)
+    throws JsonParseException, JsonSyntaxException
+    {
+        JsonUtility json = new JsonUtility();                 
+         
+        String jsonRawResData = json.toJson(getResponseData());               
+        return json.fromJson(jsonRawResData, destinationClass);
+        
     }
     
 }

@@ -1,6 +1,8 @@
 package com.akamon.api.client.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * Utility to handle the goole json library (gson)
@@ -17,8 +19,9 @@ public class JsonUtility {
         return gson.toJson(obj);
     }
     
-    public <T>T fromJson(String jsonString, Class <? extends T> destinationClass ) throws Exception
+    public <T>T fromJson(String jsonString, Class <? extends T> destinationClass ) throws JsonParseException, JsonSyntaxException
     {
-        return gson.fromJson(jsonString, destinationClass);                
+        return gson.fromJson(jsonString, destinationClass);   
+        
     }
 }

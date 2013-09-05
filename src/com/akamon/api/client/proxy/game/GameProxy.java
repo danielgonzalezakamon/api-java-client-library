@@ -6,14 +6,13 @@ import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ICallableResponse;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
 import com.akamon.api.client.service.imp.http.JsonCallableResponse;
-import com.google.gson.internal.LinkedTreeMap;
 
 /**
  * Proxy object to invoke the game operations
  * @author Miguel Angel Garcia
  */
 public class GameProxy extends BaseServiceProxy { 
-        
+                    
     public GameProxy(AuthData authData){
         super(authData);
     }
@@ -26,42 +25,47 @@ public class GameProxy extends BaseServiceProxy {
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
-
-    public Integer createMatch(Integer game_id, Object[] users) throws ServiceDefinitionException, ServiceInvocationException{
-        Integer matchId = null;
-        
+    public CreateMatchResponseData createMatch(Integer game_id, Object[] users) throws ServiceDefinitionException, ServiceInvocationException{       
+        CreateMatchResponseData response = null;
         Object[] params = {game_id, users};
         
         ICallableResponse res = invoke("createMatch", params);
         if (res instanceof JsonCallableResponse){
             JsonCallableResponse jRes = (JsonCallableResponse) res;
-            matchId = jRes.getResponseIntegerValue("match_id");
+            
+            try {
+                response = jRes.buildResponseDataObject(CreateMatchResponseData.class);            
+            }
+            catch (Exception ex){
+                 throw new ServiceInvocationException("createMatch", "Response parse error", ex);
+            }
         }
         
-        return matchId;
+        return response;
     }
     
     /**
      * Updates the match status
      * @param game_id Game identifier
      * @param match_id Match identifier
-     * @param state Match state
+     * @param state Match state (initiated, finished)
      * @return The match final status
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
-    public String updateMatch(Integer game_id, Integer match_id, String state) throws ServiceDefinitionException, ServiceInvocationException{
-        String resStatus = null;
+    public UpdateMatchResponseData updateMatch(Integer game_id, Integer match_id, String state) throws ServiceDefinitionException, ServiceInvocationException{
+        
+        UpdateMatchResponseData response = null;        
         Object[] params = {game_id, match_id, state};
         
         ICallableResponse res = invoke("updateMatch", params);
         if (res instanceof JsonCallableResponse){
             JsonCallableResponse jRes = (JsonCallableResponse) res;
             
-            resStatus = jRes.getResponseIntegerValue("match_status").toString();            
+            response = jRes.buildResponseDataObject(UpdateMatchResponseData.class);                        
         }
         
-        return resStatus;
+        return response;
     }
     
     /**
@@ -75,31 +79,16 @@ public class GameProxy extends BaseServiceProxy {
      * @throws ServiceInvocationException 
      */
     public MatchChipsResponseData matchChips(Integer gameId, Integer matchId, String publicUserId, Integer chips) throws ServiceDefinitionException, ServiceInvocationException{
-        MatchChipsResponseData responseData = new MatchChipsResponseData();
+        MatchChipsResponseData response = null;
         Object[] params = {gameId, matchId, publicUserId, chips};
         
         ICallableResponse res = invoke("matchChips", params);
         if (res instanceof JsonCallableResponse){
             JsonCallableResponse jRes = (JsonCallableResponse) res;
-            LinkedTreeMap data = (LinkedTreeMap) jRes.getResponseData();
             
-
-            String resPublicUserId = null;
-            Integer resChips = null;
-            
-            if (data.containsKey("public_user_id")){
-                resPublicUserId = data.get("public_user_id").toString();
-            }
-            
-            if (data.containsKey("chips")){
-                resChips = Integer.parseInt(data.get("chips").toString());
-            }
-            
-            responseData.setPublicUserId(resPublicUserId);
-            responseData.setChips(resChips);
-
+            response = jRes.buildResponseDataObject(MatchChipsResponseData.class);            
         }
         
-        return responseData;
+        return response;
     }        
 }
