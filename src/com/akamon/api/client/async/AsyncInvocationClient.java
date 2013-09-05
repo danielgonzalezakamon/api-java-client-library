@@ -260,7 +260,7 @@ public class AsyncInvocationClient extends Thread{
     /**
      * @param response the response to set
      */
-    public void setResponse(Object response) {
+    private void setResponse(Object response) {
         this.response = response;
     }
     
