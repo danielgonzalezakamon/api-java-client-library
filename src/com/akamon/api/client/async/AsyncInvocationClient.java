@@ -110,7 +110,7 @@ public class AsyncInvocationClient extends Thread{
     }        
         
     /**
-     * Figured out the class of the parameters
+     * Figures out the class of the parameters
      * @param parameters Array of parameters to be passed to the invocation of the service
      * @return Array of Class, the i-position links to the class of the i-parameter
      */
