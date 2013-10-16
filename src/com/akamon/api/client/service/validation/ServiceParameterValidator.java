@@ -257,7 +257,7 @@ public class ServiceParameterValidator {
      * @return True if is valid
      */
     private boolean validateTypeArray(Object data){
-        return data instanceof Object[];
+        return ((data instanceof Object[]) || (data instanceof java.util.HashMap));
     }
     
     /**

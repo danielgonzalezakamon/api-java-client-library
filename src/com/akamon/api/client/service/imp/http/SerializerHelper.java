@@ -23,7 +23,7 @@ public class SerializerHelper {
             
             boolean customSerialization = false;
             
-            if ( (data instanceof Object[]) || (data instanceof java.util.Date)) {
+            if ( (data instanceof Object[]) || (data instanceof java.util.HashMap) || (data instanceof java.util.Date)) {
                 customSerialization = true;                
             }
                         
