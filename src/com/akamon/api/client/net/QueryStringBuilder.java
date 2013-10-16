@@ -324,7 +324,7 @@ public class QueryStringBuilder {
                 Map.Entry<String, NameValuePair> entry = iter.next();
 
                 String value = entry.getValue().getValue();
-                if (value != null && value.trim().length() > 0) {
+                if (value != null ) {
                     String encoded = enc == null ? URLEncoder.encode(value, DEFAULT_ENCODING) :
                         URLEncoder.encode(value, enc);
                     buffer.append(entry.getKey()).append("=").append(encoded);
