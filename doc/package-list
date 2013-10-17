@@ -5,6 +5,7 @@ com.akamon.api.client.net.error
 com.akamon.api.client.proxy
 com.akamon.api.client.proxy.game
 com.akamon.api.client.proxy.tests
+com.akamon.api.client.proxy.user
 com.akamon.api.client.security
 com.akamon.api.client.service
 com.akamon.api.client.service.error
