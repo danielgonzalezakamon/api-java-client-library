@@ -214,6 +214,6 @@ public class UserProxy extends BaseServiceProxy {
         }
         
         return response;   
-    }
+    }   
     
 }
