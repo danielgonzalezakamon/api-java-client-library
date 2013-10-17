@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
  * Base class to implement the operation proxy objects
  * @author Miguel Angel Garcia
  */
-public abstract class BaseServiceProxy {
+public abstract class BaseServiceProxy implements ICallableService {
     
     private AuthData authData = null;
     
@@ -29,6 +29,14 @@ public abstract class BaseServiceProxy {
         serviceFactory = new CallableServiceFactory(factoryOptions);        
     }
     
+    /**
+     * Invokes a service
+     * @param serviceCode Code of the service to call
+     * @param parameters Service invokation parameters
+     * @return Response from service
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
     public ICallableResponse invoke(String serviceCode, Object[] parameters) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableService service = this.serviceFactory.loadCallableService(serviceCode);
         
