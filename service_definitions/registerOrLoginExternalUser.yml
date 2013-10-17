@@ -1,0 +1,45 @@
+registerOrLoginExternalUser:
+  code: 3
+  method: POST
+  format: application/json  
+  url: http://dev-api.local.akamon.com/app_dev.php/users
+  params:
+    providerName:
+      type: string
+      required: true
+    providerUserId:
+      type: string
+      required: true
+    name:
+      type: string
+      required: false
+      regexp: ['/^[a-zA-Z0-9_]{5,15}$/', '/^((?!(admin|modera|mundijuegos)).)*$/']
+    email:
+      type: string
+      required: true
+    password:
+      type: string
+      required: false
+      regexp: ['/^[a-zA-Z0-9]{6,15}$/']
+    genre:
+      type: string
+      required: true
+      regexp: ['/^V$|^H$|^I$|^v$|^h$|^i$/']
+    ip:
+      type: string
+      required: true
+    country:
+      type: string
+      required: false
+    partnerAlias:
+      type: string
+      required: false
+    friend:
+      type: string
+      required: false
+    additionalParams:
+      type: array
+      required: false
+    realName:
+      type: string
+      required: false
