@@ -1,0 +1,36 @@
+setProductExchangeTransaction:
+  code: 23
+  method: POST
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/product/{productId}/exchange/{exchangeProductId}
+  params:
+    productId:
+      type: integer
+      required: true
+    productQuantity:
+      type: integer
+      required: true
+    exchangeProductId:
+      type: integer
+      required: true
+    exchangeQuantity:
+      type: integer
+      required: true
+    transactionTypeId:
+      type: integer
+      required: true
+    publicUserId:
+      type: string
+      required: true
+    countryId:
+      type: integer
+      required: true
+    partnerId:
+      type: integer
+      required: true
+    subplatformId:
+      type: integer
+      required: true
+    gameId:
+      type: integer
+      required: true

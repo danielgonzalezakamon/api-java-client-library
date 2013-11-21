@@ -1,14 +1,18 @@
 package com.akamon.api.client.proxy.product;
 
 /**
- * Response data for the api operation setProductTransaction
+ * Response data for the api operation setProductExchangeTransaction
  * @author Isis Garrido
  */
-public class ProductTransactionResponseData {
+public class ProductExchangeTransactionResponseData {
     
     private Integer productId;
     
     private Integer productQuantity;
+    
+    private Integer exchangeProductId;
+    
+    private Integer exchangeQuantity;
     
     private Integer transactionTypeId;
     
@@ -22,7 +26,7 @@ public class ProductTransactionResponseData {
     
     private Integer gameId;
     
-    ProductTransactionResponseData() {}
+    ProductExchangeTransactionResponseData() {}
 
     /**
      * @return the productId
@@ -50,6 +54,34 @@ public class ProductTransactionResponseData {
      */
     void setProductQuantity(Integer productQuantity) {
         this.productQuantity = productQuantity;
+    }
+    
+    /**
+     * @return the exchangeProductId
+     */
+    Integer getExchangeProductId() {
+        return exchangeProductId;
+    }
+
+    /**
+     * @param exchangeProductId the exchangeProductId to set
+     */
+    void setExchangeProductId(Integer exchangeProductId) {
+        this.exchangeProductId = exchangeProductId;
+    }
+
+    /**
+     * @return the exchangeQuantity
+     */
+    public Integer getExchangeQuantity() {
+        return exchangeQuantity;
+    }
+
+    /**
+     * @param exchangeQuantity the exchangeQuantity to set
+     */
+    void setExchangeQuantity(Integer exchangeQuantity) {
+        this.exchangeQuantity = exchangeQuantity;
     }
 
     /**

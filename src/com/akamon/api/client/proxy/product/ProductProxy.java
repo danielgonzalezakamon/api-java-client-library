@@ -67,4 +67,60 @@ public class ProductProxy extends BaseServiceProxy {
         return response;                
     }
     
+    /**
+     * Create product transaction for an exchange of products
+     * The user gets a productId and consume exchangeProductId
+     * 
+     * @param productId Product that the user gets
+     * @param productQuantity How many products the user buys
+     * @param exchangeProductId Product that the user consume. Must be negative value
+     * @param exchangeQuantity How many exchangeProductId consum for the exchange
+     * @param transactionTypeId
+     * @param publicUserId
+     * @param countryId
+     * @param partnerId
+     * @param subplatformId
+     * @param gameId
+     * @return
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
+    public ProductExchangeTransactionResponseData setProductExchangeTransaction (Integer productId,
+            Integer productQuantity,
+            Integer exchangeProductId,
+            Integer exchangeQuantity,
+            Integer transactionTypeId,
+            String publicUserId,
+            Integer countryId,
+            Integer partnerId,
+            Integer subplatformId,
+            Integer gameId) throws ServiceDefinitionException, ServiceInvocationException
+    {
+        
+        ProductExchangeTransactionResponseData response = null;
+        Object[] params = {productId,
+            productQuantity,
+            exchangeProductId,
+            exchangeQuantity,
+            transactionTypeId,
+            publicUserId,
+            countryId,
+            partnerId,
+            subplatformId,
+            gameId};
+        
+        ICallableResponse res = invoke("setProductExchangeTransaction", params);
+        if (res instanceof JsonCallableResponse){
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+            
+            try {
+                response = jRes.buildResponseDataObject(ProductExchangeTransactionResponseData.class);            
+            }
+            catch (Exception ex){
+                 throw new ServiceInvocationException("setProductExchangeTransaction", "Response parse error", ex);
+            }
+        }
+        
+        return response;                
+    }
 }
