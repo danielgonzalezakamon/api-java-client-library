@@ -1,0 +1,70 @@
+package com.akamon.api.client.proxy.product;
+
+import com.akamon.api.client.error.ServiceInvocationException;
+import com.akamon.api.client.proxy.BaseServiceProxy;
+import com.akamon.api.client.proxy.game.CreateMatchResponseData;
+import com.akamon.api.client.security.AuthData;
+import com.akamon.api.client.service.ICallableResponse;
+import com.akamon.api.client.service.error.ServiceDefinitionException;
+import com.akamon.api.client.service.imp.http.JsonCallableResponse;
+
+/**
+ *
+ * @author Isis Garrido
+ */
+public class ProductProxy extends BaseServiceProxy { 
+                    
+    public ProductProxy (AuthData authData){
+        super(authData);
+    }
+    
+    /**
+     * Create product transaction and virtual currency transaction if the product is a virtual currency
+     * @param productId
+     * @param productQuantity
+     * @param transactionTypeId
+     * @param publicUserId
+     * @param countryId
+     * @param partnerId
+     * @param subplatformId
+     * @param gameId
+     * @return
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
+    public ProductTransactionResponseData setProductTransaction (Integer productId,
+            Integer productQuantity,
+            Integer transactionTypeId,
+            String publicUserId,
+            Integer countryId,
+            Integer partnerId,
+            Integer subplatformId,
+            Integer gameId) throws ServiceDefinitionException, ServiceInvocationException
+    {
+        
+        ProductTransactionResponseData response = null;
+        Object[] params = {productId,
+            productQuantity,
+            transactionTypeId,
+            publicUserId,
+            countryId,
+            partnerId,
+            subplatformId,
+            gameId};
+        
+        ICallableResponse res = invoke("setProductTransaction", params);
+        if (res instanceof JsonCallableResponse){
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+            
+            try {
+                response = jRes.buildResponseDataObject(ProductTransactionResponseData.class);            
+            }
+            catch (Exception ex){
+                 throw new ServiceInvocationException("setProductTransaction", "Response parse error", ex);
+            }
+        }
+        
+        return response;                
+    }
+    
+}
