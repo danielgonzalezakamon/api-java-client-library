@@ -2,6 +2,7 @@ package com.akamon.api.client.proxy.product;
 
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ServiceConfigManager;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -108,6 +109,33 @@ public class ProductProxyTest {
                 partnerId,
                 subplatformId,
                 gameId);
+            System.out.println(res);
+        }
+        catch (Exception e) {
+            ex = e;
+            
+            e.printStackTrace();
+        }
+
+        assertTrue("An exception was returned", ex == null);
+    }
+    
+    /**
+     * Test of getGameProductsResponseData method, of class ProductProxy.
+     */
+    @Test
+    public void testGetGameProductsResponseData() {
+        System.out.println ("getGameProductsResponseData test");
+        ServiceConfigManager.registerConfigDir("C:\\Users\\Isis\\Documents\\GitHub\\api-java-client-library\\service_definitions"); //"./service_definitions"
+
+        ProductProxy p = new ProductProxy(new AuthData("app1","7535866746d65a7eef0241caa8163fe7","sha256"));
+        
+        Integer gameId = 46; //roulette empires
+
+        Exception ex = null;
+        ArrayList res = null;
+        try {
+            res = p.getGameProducts (gameId);
         }
         catch (Exception e) {
             ex = e;

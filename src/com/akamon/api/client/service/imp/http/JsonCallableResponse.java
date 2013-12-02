@@ -6,6 +6,7 @@ import com.akamon.api.client.util.JsonUtility;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +37,7 @@ public class JsonCallableResponse extends BaseCallableResponse {
         jsonData = json.fromJson(jsonString, JsonCallableResponseBean.class);
         
         if ( (jsonData == null) || (jsonData.getErrorCode() == null) || (jsonData.getErrorString() == null) 
-                || (jsonData.getResponseData() == null)  || (!(jsonData.getResponseData() instanceof com.google.gson.internal.LinkedTreeMap))  )
+                || (jsonData.getResponseData() == null)  || ((!(jsonData.getResponseData() instanceof com.google.gson.internal.LinkedTreeMap)) && (!(jsonData.getResponseData() instanceof ArrayList) )))
         {
             throw new BadJsonResponseInvocationException(serviceCode, jsonString);
         }  
@@ -77,4 +78,23 @@ public class JsonCallableResponse extends BaseCallableResponse {
         
     }
     
+    /**
+     * Parses and builds the specific response data object     
+     * @param destinationClass Class of the right response object
+     * @return Response object
+     */
+    public ArrayList buildResponseDataList(Class destinationClass)
+    throws JsonParseException, JsonSyntaxException
+    {
+        JsonUtility json = new JsonUtility();                 
+        ArrayList responseData = (ArrayList) getResponseData();
+        String jsonRawResData;
+        ArrayList jsonResData = new ArrayList();
+        for(int i=0; i< responseData.size(); i++){
+            jsonRawResData = json.toJson(responseData.get(i));
+            jsonResData.add(i, json.fromJson(jsonRawResData, destinationClass));
+        }
+        return jsonResData;
+        
+    }
 }

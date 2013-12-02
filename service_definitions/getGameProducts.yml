@@ -1,0 +1,9 @@
+getGameProducts:
+  code: 34
+  method: GET
+  format: application/json
+  url: http://dev-api.local.akamon.com/app_dev.php/product/game/{gameId}
+  params:
+    gameId:
+      type: integer
+      required: true
