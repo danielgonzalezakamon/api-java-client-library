@@ -18,37 +18,58 @@ public class UserProxy extends BaseServiceProxy {
     public UserProxy(AuthData authData){
         super(authData);
     }
+    
+    /**
+     * Creates a user session (to pass the user info safely).
+     * This session must be consumed using the userSessionGetContent() operation
+     * (normally this is created by the web server, and passed to the client
+     * instead of 
+     * 
+     * @param userName 
+     */
+    public UserSessionResponseData createUserSession (String userName) throws ServiceDefinitionException, ServiceInvocationException {
+        UserSessionResponseData response = null;
+        Object[] params = {userName};
 
+        ICallableResponse res = invoke("createUserSession", params);
 
-	/**
-	 * @author Victor Bolinches Marin
-	 * Method that though the sessionID of portal obtains the user properties
-	 * @param sessionID (Required)
-	 * @throws ServiceInvocationException
-	 * @return User created data
-	 */
-    public UserResponseData userSessionGetContent(String sessionID) throws ServiceInvocationException , ServiceDefinitionException
-    {
-	    UserResponseData response = null;
-	    Object[] params = { sessionID };
+        if (res instanceof JsonCallableResponse) {
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
 
-	    ICallableResponse res = invoke("userSessionGetContent", params);
+            try {
+                response = jRes.buildResponseDataObject(UserSessionResponseData.class);
+            } catch (Exception ex) {
+                throw new ServiceInvocationException("createUserSession", "Response parse error", ex);
+            }
+        }
 
-	    if (res instanceof JsonCallableResponse)
-	    {
-		    JsonCallableResponse jRes = (JsonCallableResponse) res;
+        return response;
+    }          
 
-		    try
-		    {
-			    response = jRes.buildResponseDataObject(UserResponseData.class);
-		    }
-		    catch (Exception ex)
-		    {
-			    throw new ServiceInvocationException("userSessionGetContent", "Response parse error", ex);
-		    }
-		}
+    /**
+     * @author Victor Bolinches Marin Method that though the sessionID of portal
+     * obtains the user properties
+     * @param sessionID (Required)
+     * @throws ServiceInvocationException
+     * @return User created data
+     */
+    public UserResponseData userSessionGetContent(String sessionID) throws ServiceInvocationException, ServiceDefinitionException {
+        UserResponseData response = null;
+        Object[] params = {sessionID};
 
-	    return response;
+        ICallableResponse res = invoke("userSessionGetContent", params);
+
+        if (res instanceof JsonCallableResponse) {
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+
+            try {
+                response = jRes.buildResponseDataObject(UserResponseData.class);
+            } catch (Exception ex) {
+                throw new ServiceInvocationException("userSessionGetContent", "Response parse error", ex);
+            }
+        }
+
+        return response;
     }
     
     /**
