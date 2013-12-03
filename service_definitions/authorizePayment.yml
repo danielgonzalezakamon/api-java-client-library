@@ -3,7 +3,7 @@ authorizePayment:
   method: POST
   format: application/json
   instance: Akamon\ServicesBundle\Services\Payments\PaymentsService
-  url: http://dev-api.local.akamon.com/app_dev.php/Payments/Authorize/{provider}/{method}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/Payments/Authorize/{provider}/{method}
   params:
     user_id:
       type: integer

@@ -3,7 +3,7 @@ purchase:
   method: POST
   format: application/json
   instance: Akamon\ServicesBundle\Services\Payments\PaymentsService
-  url: http://dev-api.local.akamon.com/app_dev.php/Payments/Purchase/{provider}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/Payments/Purchase/{provider}
   params:
     provider:
       type: string

@@ -2,7 +2,7 @@ getBonus:
   code: 7
   method: POST
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/bonus/user/{user_id}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/bonus/user/{user_id}
   instance: Akamon\ServicesBundle\Services\Bonus\BonusService
   params:
     user_id:

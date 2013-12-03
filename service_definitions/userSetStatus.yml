@@ -4,7 +4,7 @@ userSetStatus:
   cache: false
   method: PUT
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/users/{public_user_id}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/users/{public_user_id}
   instance: Akamon\ServicesBundle\Services\Users\UsersService
   params:
     public_user_id:
