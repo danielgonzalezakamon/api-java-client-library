@@ -119,3 +119,7 @@ public class UserResponseData {
         this.chips = chips;
     }        
 }
+
+
+
+
