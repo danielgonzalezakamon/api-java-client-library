@@ -6,7 +6,7 @@ createUserSession:
   max_request: 30
   time_request: 30
   method: POST
-  url: http://dev-api.local.akamon.com/app_dev.php/users/session
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/users/session
   format: application/json
   instance: Akamon\ServicesBundle\Services\Users\UsersService
   params:    

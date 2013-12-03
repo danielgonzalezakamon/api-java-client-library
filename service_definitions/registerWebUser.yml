@@ -7,7 +7,7 @@ registerWebUser:
   method: POST
   format: application/json
   instance: Akamon\ServicesBundle\Services\Users\UsersService
-  url: http://dev-api.local.akamon.com/app_dev.php/users
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/users
   params:
     name:
       type: string

@@ -2,6 +2,7 @@ package com.akamon.api.client.proxy.user;
 
 import com.akamon.api.client.error.ServiceInvocationException;
 import com.akamon.api.client.proxy.BaseServiceProxy;
+import com.akamon.api.client.proxy.user.UserResponseData;
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ICallableResponse;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
@@ -16,6 +17,59 @@ public class UserProxy extends BaseServiceProxy {
                     
     public UserProxy(AuthData authData){
         super(authData);
+    }
+    
+    /**
+     * Creates a user session (to pass the user info safely).
+     * This session must be consumed using the userSessionGetContent() operation
+     * (normally this is created by the web server, and passed to the client
+     * instead of 
+     * 
+     * @param userName 
+     */
+    public UserSessionResponseData createUserSession (String userName) throws ServiceDefinitionException, ServiceInvocationException {
+        UserSessionResponseData response = null;
+        Object[] params = {userName};
+
+        ICallableResponse res = invoke("createUserSession", params);
+
+        if (res instanceof JsonCallableResponse) {
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+
+            try {
+                response = jRes.buildResponseDataObject(UserSessionResponseData.class);
+            } catch (Exception ex) {
+                throw new ServiceInvocationException("createUserSession", "Response parse error", ex);
+            }
+        }
+
+        return response;
+    }          
+
+    /**
+     * @author Victor Bolinches Marin Method that though the sessionID of portal
+     * obtains the user properties
+     * @param sessionID (Required)
+     * @throws ServiceInvocationException
+     * @return User created data
+     */
+    public UserResponseData userSessionGetContent(String sessionID) throws ServiceInvocationException, ServiceDefinitionException {
+        UserResponseData response = null;
+        Object[] params = {sessionID};
+
+        ICallableResponse res = invoke("userSessionGetContent", params);
+
+        if (res instanceof JsonCallableResponse) {
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+
+            try {
+                response = jRes.buildResponseDataObject(UserResponseData.class);
+            } catch (Exception ex) {
+                throw new ServiceInvocationException("userSessionGetContent", "Response parse error", ex);
+            }
+        }
+
+        return response;
     }
     
     /**

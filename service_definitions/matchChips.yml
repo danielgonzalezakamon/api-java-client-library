@@ -2,7 +2,7 @@ matchChips:
   code: 1
   method: POST
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/games/{game_id}/match/{match_id}/chips
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/games/{game_id}/match/{match_id}/chips
   instance: Akamon\ServicesBundle\Services\Games\GamesService
   params:
     game_id:
