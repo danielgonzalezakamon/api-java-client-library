@@ -2,7 +2,7 @@ singleSignOn:
   code: 4
   method: POST
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/sso
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/sso
   instance: Akamon\ServicesBundle\Services\SSO\SSOService
   params:
     provider:

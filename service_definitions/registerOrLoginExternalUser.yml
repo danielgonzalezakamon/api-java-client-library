@@ -2,7 +2,7 @@ registerOrLoginExternalUser:
   code: 3
   method: POST
   format: application/json  
-  url: http://dev-api.local.akamon.com/app_dev.php/users
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/users
   params:
     providerName:
       type: string

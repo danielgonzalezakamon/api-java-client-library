@@ -2,7 +2,7 @@ authenticateUser:
   code: 7
   method: POST
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/users/authenticate/{userName}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/users/authenticate/{userName}
   instance: Akamon\ServicesBundle\Services\Users\UsersService
   params:
     userName:

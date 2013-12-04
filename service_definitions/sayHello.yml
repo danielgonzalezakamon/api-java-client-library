@@ -1,7 +1,7 @@
 sayHello:
   service: sayHello
   code: 7  
-  url: http://dev-api.local.akamon.com/app_dev.php/test/sayHello/{name}
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/test/sayHello/{name}
   method: GET
   format: application/json
   instance: Akamon\ServicesBundle\Services\Tests\TestsService

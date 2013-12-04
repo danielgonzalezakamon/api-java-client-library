@@ -2,7 +2,7 @@ createMatch:
   code: 10
   method: POST
   format: application/json
-  url: http://dev-api.local.akamon.com/app_dev.php/games/{game_id}/match
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/games/{game_id}/match
   instance: Akamon\ServicesBundle\Services\Games\GamesService
   params:
     game_id:
