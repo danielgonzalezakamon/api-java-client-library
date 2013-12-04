@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="dist">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/akamon-api-client-proxy-0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/akamon-api-client-base-0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
