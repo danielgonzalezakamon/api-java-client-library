@@ -1,5 +1,6 @@
 package com.akamon.api.client.proxy.experiment;
 
+import java.util.*;
 /**
  * Created with IntelliJ IDEA.
  * User: vicboma
@@ -12,7 +13,7 @@ package com.akamon.api.client.proxy.experiment;
 public class ExperimentResponseData
 {
 	/** Represent de test A/B */
-	private String experiment;
+	private Map<String,Object> experiment;
 
 	/**
 	 * Method that get the experiment
@@ -20,15 +21,15 @@ public class ExperimentResponseData
 	 */
 	public String getExperiment()
 	{
-		return this.experiment;
+		return this.experiment.get("value")+"";
 	}
 
 	/**
 	 * Method that set the experiment
-	 * @param paramString
+	 * @param experiment
 	 */
-	public void setExperiment(String paramString)
+	public void setExperiment(String experiment)
 	{
-		this.experiment = paramString;
+	    this.experiment.put("value",experiment);
 	}
 }
