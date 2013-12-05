@@ -8,6 +8,7 @@ import com.akamon.api.client.service.ICallableResponse;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
 import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -133,7 +134,7 @@ public class ProductProxy extends BaseServiceProxy {
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
-    public ArrayList getGameProducts (Integer gameId) 
+    /*public ArrayList getGameProducts (Integer gameId) 
             throws ServiceDefinitionException, ServiceInvocationException
     {
         //GetGameProductsResponseData response = null;
@@ -146,6 +147,36 @@ public class ProductProxy extends BaseServiceProxy {
             System.out.println(res.getResponseData());
             try {
                 response = jRes.buildResponseDataList(GetGameProductsResponseData.class);
+                System.out.println(response);
+            }
+            catch (Exception ex){
+                 throw new ServiceInvocationException("getGameProducts", "Response parse error", ex);
+            }
+        }
+        
+        return response;
+    }*/
+    
+    /**
+     * Get every product related with a game
+     * 
+     * @param gameId
+     * @return
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
+    public GetGameProductsResponseData getGameProducts (Integer gameId) 
+            throws ServiceDefinitionException, ServiceInvocationException
+    {
+        GetGameProductsResponseData response = null;
+        Object[] params = {gameId};
+        
+        ICallableResponse res = invoke("getGameProducts", params);
+        if (res instanceof JsonCallableResponse){
+            JsonCallableResponse jRes = (JsonCallableResponse) res;
+            System.out.println(res.getResponseData());
+            try {
+                response = jRes.buildResponseDataObject(GetGameProductsResponseData.class);
                 System.out.println(response);
             }
             catch (Exception ex){

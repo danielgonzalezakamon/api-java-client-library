@@ -1,11 +1,16 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package com.akamon.api.client.proxy.product;
 
 /**
- * Response data for the api operation getGameProducts
- * @author Isis Garrido
+ *
+ * @author Isis
  */
-public class GetGameProductsResponseData {
-    
+public class ProductBean {
     private Integer productId;
     
     private String productName;
@@ -19,12 +24,12 @@ public class GetGameProductsResponseData {
     private Integer currencyCode;
     
     
-    GetGameProductsResponseData() {}
+    ProductBean() {}
 
     /**
      * @return the productId
      */
-    Integer getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
@@ -73,7 +78,7 @@ public class GetGameProductsResponseData {
     /**
      * @param quantity the quantity to set
      */
-    public void setQuantity(Integer quantity) {
+    void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -87,7 +92,7 @@ public class GetGameProductsResponseData {
     /**
      * @param amount the amount to set
      */
-    public void setAmount(Double amount) {
+    void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -101,7 +106,7 @@ public class GetGameProductsResponseData {
     /**
      * @param currencyCode the currencyCode to set
      */
-    public void setCurrencyCode(Integer currencyCode) {
+    void setCurrencyCode(Integer currencyCode) {
         this.currencyCode = currencyCode;
     }
 }
