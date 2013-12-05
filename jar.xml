@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="api-java-client-library" basedir="." default="distribute">
+    <property name="src"   value="src"/>
+    <property name="build" value="build"/>
+    <property name="lib"   value="lib"/>
+    <property name="dist"  value="dist"/>
+    <property name="doc"  value="doc"/>
+    
+    <property name="version_base"  value="0.1"/>
+    <property name="version_proxy"  value="0.4"/>
+    
+    <property name="jar_name_base"  value="akamon-api-client-base-${version_base}.jar"/>
+    <property name="jar_name_proxy"  value="akamon-api-client-proxy-${version_proxy}.jar"/>
+            
+    <path id="classpath">
+        <fileset dir="${lib}" includes="**/*.jar"/>
+    </path>
+       
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete file="${dist}/${jar_name_base}"/>
+        <delete file="${dist}/${jar_name_proxy}"/>
+    </target>
+    
+    <target name="compile">
+        <mkdir dir="${build}/classes"/>
+        <javac srcdir="${src}" 
+               destdir="${build}/classes"
+               includeantruntime="false">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+    
+    <target name="jar-base" depends="clean,compile">
+        <mkdir dir="${build}/jar"/>
+        <jar destfile="${build}/jar/${jar_name_base}" 
+             basedir="${build}/classes">
+            <exclude name="**/proxy/**"/> 
+            <manifest>
+                <attribute name="Created-By" value="Akamon Entertainment"/>                
+            </manifest>
+        </jar>                    
+    </target>   
+    
+    <target name="jar-proxy" depends="clean,compile">
+        <mkdir dir="${build}/jar"/>
+        <jar destfile="${build}/jar/${jar_name_proxy}" 
+             basedir="${build}/classes">             
+            <include name="**/proxy/**"/>             
+            <manifest>
+                <attribute name="Created-By" value="Akamon Entertainment"/>                
+            </manifest>
+        </jar>                    
+    </target>
+    
+    <target name="distribute-base" depends="jar-base">
+        <mkdir dir="${dist}" />
+        <copy file="${build}/jar/${jar_name_base}" tofile="${dist}/${jar_name_base}"/>
+    </target>  
+    
+    <target name="distribute-proxy" depends="jar-proxy">
+        <mkdir dir="${dist}" />
+        <copy file="${build}/jar/${jar_name_proxy}" tofile="${dist}/${jar_name_proxy}"/>
+    </target>
+    
+    <target name="distribute" depends="distribute-base,distribute-proxy" />   
+    
+    <target name="javadoc" depends="compile">
+        <mkdir dir="${doc}"/>
+        <javadoc sourcepath="${src}" destdir="${doc}"/>
+    </target>
+</project>
