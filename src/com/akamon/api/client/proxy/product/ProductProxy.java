@@ -125,38 +125,7 @@ public class ProductProxy extends BaseServiceProxy {
         
         return response;                
     }
-    
-    /**
-     * Get every product related with a game
-     * 
-     * @param gameId
-     * @return
-     * @throws ServiceDefinitionException
-     * @throws ServiceInvocationException 
-     */
-    /*public ArrayList getGameProducts (Integer gameId) 
-            throws ServiceDefinitionException, ServiceInvocationException
-    {
-        //GetGameProductsResponseData response = null;
-        ArrayList response = null;
-        Object[] params = {gameId};
-        
-        ICallableResponse res = invoke("getGameProducts", params);
-        if (res instanceof JsonCallableResponse){
-            JsonCallableResponse jRes = (JsonCallableResponse) res;
-            System.out.println(res.getResponseData());
-            try {
-                response = jRes.buildResponseDataList(GetGameProductsResponseData.class);
-                System.out.println(response);
-            }
-            catch (Exception ex){
-                 throw new ServiceInvocationException("getGameProducts", "Response parse error", ex);
-            }
-        }
-        
-        return response;
-    }*/
-    
+      
     /**
      * Get every product related with a game
      * 
