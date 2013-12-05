@@ -5,6 +5,7 @@
 package com.akamon.api.client.proxy.user;
 
 import com.akamon.api.client.security.AuthData;
+import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.test.BaseTest;
 import java.util.HashMap;
 import org.junit.After;
@@ -20,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class UserProxyTest extends BaseTest {
     
-    public UserProxyTest() {
+    public UserProxyTest() {        
     }
     
     @BeforeClass
@@ -77,8 +78,6 @@ public class UserProxyTest extends BaseTest {
         if ( userData != null ) {
             assertEquals ("The returned user does not match the expected", "carles", userData.getUser_name());
         }
-    }
-    
- 
+    }                
 
 }
