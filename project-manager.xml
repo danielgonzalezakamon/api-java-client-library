@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="api-java-client-library" basedir="." default="distribute">
     <property name="src"   value="src"/>
+    <property name="test"   value="test"/>
     <property name="build" value="build"/>
     <property name="lib"   value="lib"/>
+    <property name="lib-test"   value="lib-test"/>
     <property name="dist"  value="dist"/>
     <property name="doc"  value="doc"/>
     
@@ -11,9 +13,17 @@
     
     <property name="jar_name_base"  value="akamon-api-client-base-${version_base}.jar"/>
     <property name="jar_name_proxy"  value="akamon-api-client-proxy-${version_proxy}.jar"/>
+    
+    <path id="application" location="${build}/classes"/>
             
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
+    </path>
+    
+    <path id="classpath-test">        
+        <path refid="classpath"/>
+        <fileset dir="${lib-test}" includes="**/*.jar"/>        
+        <pathelement location="${build}/test/classes"/>
     </path>
        
     <target name="clean">
@@ -24,10 +34,24 @@
     
     <target name="compile">
         <mkdir dir="${build}/classes"/>
-        <javac srcdir="${src}" 
+        <javac srcdir="${src}"
                destdir="${build}/classes"
                includeantruntime="false">
             <classpath refid="classpath"/>
+        </javac>
+    </target>
+        
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${build}/test/classes"/>
+        <javac srcdir="${test}" 
+               destdir="${build}/test/classes"
+               includeantruntime="false">
+            
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="classpath-test"/>                
+                <path refid="application"/>
+            </classpath>            
         </javac>
     </target>
     
@@ -68,5 +92,23 @@
     <target name="javadoc" depends="compile">
         <mkdir dir="${doc}"/>
         <javadoc sourcepath="${src}" destdir="${doc}"/>
+    </target>
+    
+    <!--
+    Execute Unit Tests
+    -->
+    <target name="test" depends="compile-test" description="Execute Unit Tests" >
+        <junit printsummary="true" showoutput="true" fork="on" dir=".">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="classpath-test"/>  
+                <path refid="application"/>              
+            </classpath>
+               
+            <batchtest>
+                <formatter usefile="false" type="brief"/>
+                <fileset dir="${test}" />
+            </batchtest>                     
+        </junit>
     </target>
 </project>

@@ -5,12 +5,16 @@ Library to execute the Akamon core api services, through the http rest interface
 
 # Compilation
 
-> ant -buildfile jar.xml
+> ant -buildfile project-manager.xml
 
 The above command generate two jars in the dist directory:
 
 * akamon-api-client-base-version.jar
 * akamon-api-client-proxy-version.jar
+
+# Unit tests
+
+> ant -f project-manager.xml test
 
 # Usage
 
