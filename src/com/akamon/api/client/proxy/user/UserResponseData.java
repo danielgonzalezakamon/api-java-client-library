@@ -1,5 +1,7 @@
 package com.akamon.api.client.proxy.user;
 
+import java.util.List;
+
 /**
  * Bean to encaosulate the user data  obtained from server
  * @author Miguel Angel Garcia
@@ -34,6 +36,11 @@ public class UserResponseData {
      * User chips balance
      */
     private Integer chips;
+    
+    /**
+     * User links to external providers (for example: facebook, taringa, etc)
+     */
+    private List<UserLinkFromProviderResponseData> links_from_providers;
 
     /**
      * @return the public_user_id
@@ -45,7 +52,7 @@ public class UserResponseData {
     /**
      * @param public_user_id Public user identifier to use in all the calls to set
      */
-    public void setPublic_user_id(String public_user_id) {
+    void setPublic_user_id(String public_user_id) {
         this.public_user_id = public_user_id;
     }
 
@@ -59,7 +66,7 @@ public class UserResponseData {
     /**
      * @param user_name User name
      */
-    public void setUser_name(String user_name) {
+    void setUser_name(String user_name) {
         this.user_name = user_name;
     }
 
@@ -73,7 +80,7 @@ public class UserResponseData {
     /**
      * @param user_id Private user id (intern usage only)
      */
-    public void setUser_id(Integer user_id) {
+    void setUser_id(Integer user_id) {
         this.user_id = user_id;
     }
 
@@ -87,7 +94,7 @@ public class UserResponseData {
     /**
      * @param avatar_url User avatar_url
      */
-    public void setAvatar_url(String avatar_url) {
+    void setAvatar_url(String avatar_url) {
         this.avatar_url = avatar_url;
     }
 
@@ -101,7 +108,7 @@ public class UserResponseData {
     /**
      * @param genre User genre (V for man, H for woman, and I when is not known)
      */
-    public void setGenre(String genre) {
+    void setGenre(String genre) {
         this.genre = genre;
     }
 
@@ -115,9 +122,25 @@ public class UserResponseData {
     /**
      * @param User chips balance
      */
-    public void setChips(Integer chips) {
+    void setChips(Integer chips) {
         this.chips = chips;
-    }        
+    }  
+
+    /**
+     * @return the links_from_providers
+     */
+    public List<UserLinkFromProviderResponseData> getLinks_from_providers() {
+        return links_from_providers;
+    }
+
+    /**
+     * @param links_from_providers the links_from_providers to set
+     */
+    void setLinks_from_providers(List<UserLinkFromProviderResponseData> links_from_providers) {
+        this.links_from_providers = links_from_providers;
+    }
+    
+    
 }
 
 

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.akamon.api.client.proxy.user;
 
 import com.akamon.api.client.security.AuthData;
@@ -57,7 +53,7 @@ public class UserProxyTest extends BaseTest {
         assertNotNull("No user data object obtained from server", userData);
         
         if ( userData != null ) {
-            assertEquals ("The returned user does not match the expected", "carles", userData.getUser_name());
+            assertEquals ("The returned user does not match the expected", "carles", userData.getUser_name());                        
         }
     }                
 
