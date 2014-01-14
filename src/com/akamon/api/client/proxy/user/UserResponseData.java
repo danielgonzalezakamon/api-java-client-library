@@ -1,12 +1,19 @@
 package com.akamon.api.client.proxy.user;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
- * Bean to encaosulate the user data  obtained from server
+ * Bean to encapsulate the user data  obtained from server
  * @author Miguel Angel Garcia
  */
 public class UserResponseData {
+    
+    public final static String PROVIDER_FACEBOOK = "facebook";
+    public final static String PROVIDER_TARINGA = "taringa";
+    public final static String PROVIDER_SPILGAMES = "spilgames";
+    public final static String PROVIDER_ORANGE = "orange";    
+    
     /**
      * Public user identifier to use in all the calls
      */
@@ -140,7 +147,86 @@ public class UserResponseData {
         this.links_from_providers = links_from_providers;
     }
     
+    /**
+     * Get facebook external user id
+     * @return 
+     */
+    public String getFacebookUserId(){
+        return getProviderUserId(PROVIDER_FACEBOOK);
+    }
     
+    /**
+     * Get taringa external user id
+     * @return 
+     */
+    public String getTaringaUserId(){
+        return getProviderUserId(PROVIDER_TARINGA);
+    }
+    
+    /**
+     * Get spilgames external user id
+     * @return 
+     */
+    public String getSpilgamesUserId(){
+        return getProviderUserId(PROVIDER_SPILGAMES);
+    }
+    
+    /**
+     * Get orange external user id
+     * @return 
+     */
+    public String getOrangeUserId(){
+        return getProviderUserId(PROVIDER_SPILGAMES);
+    }        
+    
+    /**
+     * Obtains the user id that matches with the provider
+     * @param provider
+     * @return 
+     */
+    private String getProviderUserId(String provider){
+        String providerUserId = null;
+        
+        Iterator<UserLinkFromProviderResponseData> linkedDataIterator = this.links_from_providers.iterator();                 
+        boolean keepSearchActive = true;
+        
+        do {
+            providerUserId = getExternalUserIdIfProviderMatches(provider, linkedDataIterator.next());
+            keepSearchActive = providerUserIdFoundOrSearchCollectionNotEmpty(providerUserId, linkedDataIterator);
+        }
+        while (keepSearchActive);
+        
+        return providerUserId;
+    }  
+    
+    /**
+     * Checks if the user id has been found, or we have to keep the serach on
+     * @param currentProviderId
+     * @param linkedDataIterator
+     * @return 
+     */
+    private boolean providerUserIdFoundOrSearchCollectionNotEmpty(
+            String currentProviderId, 
+            Iterator<UserLinkFromProviderResponseData> linkedDataIterator)
+    {
+        return ((linkedDataIterator.hasNext()) && (currentProviderId == null));
+    }
+    
+    /**
+     * Gets the user id from the provider, is the linked data corresponfs to the right provider
+     * @param provider
+     * @param linkedData
+     * @return 
+     */
+    private String getExternalUserIdIfProviderMatches(String provider, UserLinkFromProviderResponseData linkedData){
+        String providerUserId = null;
+        
+        if (linkedData.getProvider().equals(provider)){
+            providerUserId = linkedData.getProvider_user_id();
+        }
+        
+        return providerUserId;
+    }
 }
 
 
