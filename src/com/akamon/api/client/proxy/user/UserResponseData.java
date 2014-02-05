@@ -176,7 +176,7 @@ public class UserResponseData {
      * @return 
      */
     public String getOrangeUserId(){
-        return getProviderUserId(PROVIDER_SPILGAMES);
+        return getProviderUserId(PROVIDER_ORANGE);
     }        
     
     /**
