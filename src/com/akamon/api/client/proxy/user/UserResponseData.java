@@ -181,17 +181,33 @@ public class UserResponseData {
         
     private String getProviderUserId(String providerName){
         String providerUserId = null;
-        
-        Iterator<UserLinkFromProviderResponseData> linkedDataIterator = this.links_from_providers.iterator();  
-        final boolean providersDataIsEmpty = !linkedDataIterator.hasNext();
+                
+        Iterator<UserLinkFromProviderResponseData> userProvidersDataIterator = getProvidersDataIterator();
+        final boolean providersDataIsEmpty = (userProvidersDataIterator == null);
         
         if (providersDataIsEmpty){
             return null;
         }
         
-        providerUserId = getProviderUserIdFromNonEmptyProvidersData(providerUserId, providerName, linkedDataIterator);                
+        providerUserId = getProviderUserIdFromNonEmptyProvidersData(providerUserId, providerName, userProvidersDataIterator);                
         
         return providerUserId;
+    }
+    
+    private Iterator<UserLinkFromProviderResponseData> getProvidersDataIterator()
+    {        
+        if (this.links_from_providers == null){
+            return null;
+        }               
+        
+        Iterator<UserLinkFromProviderResponseData> userProvidersDataIterator = this.links_from_providers.iterator();  
+        final boolean providersDataIsEmpty = !userProvidersDataIterator.hasNext();
+        
+        if (providersDataIsEmpty){
+            userProvidersDataIterator = null;
+        }
+        
+        return userProvidersDataIterator;        
     }
 
     private String getProviderUserIdFromNonEmptyProvidersData(String providerUserId, 
