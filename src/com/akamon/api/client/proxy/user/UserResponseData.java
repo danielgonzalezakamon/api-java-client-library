@@ -178,46 +178,43 @@ public class UserResponseData {
     public String getOrangeUserId(){
         return getProviderUserId(PROVIDER_ORANGE);
     }        
-    
-    /**
-     * Obtains the user id that matches with the provider
-     * @param provider
-     * @return 
-     */
-    private String getProviderUserId(String provider){
+        
+    private String getProviderUserId(String providerName){
         String providerUserId = null;
         
-        Iterator<UserLinkFromProviderResponseData> linkedDataIterator = this.links_from_providers.iterator();                 
-        boolean keepSearchActive = true;
+        Iterator<UserLinkFromProviderResponseData> linkedDataIterator = this.links_from_providers.iterator();  
+        final boolean providersDataIsEmpty = !linkedDataIterator.hasNext();
         
+        if (providersDataIsEmpty){
+            return null;
+        }
+        
+        providerUserId = getProviderUserIdFromNonEmptyProvidersData(providerUserId, providerName, linkedDataIterator);                
+        
+        return providerUserId;
+    }
+
+    private String getProviderUserIdFromNonEmptyProvidersData(String providerUserId, 
+            String providerName, 
+            Iterator<UserLinkFromProviderResponseData> linkedDataIterator) 
+    {
+        boolean keepSearchActive = true;
         do {
-            providerUserId = getExternalUserIdIfProviderMatches(provider, linkedDataIterator.next());
+            providerUserId = getExternalUserIdIfProviderMatches(providerName, linkedDataIterator.next());
             keepSearchActive = providerUserIdFoundOrSearchCollectionNotEmpty(providerUserId, linkedDataIterator);
         }
         while (keepSearchActive);
         
         return providerUserId;
     }  
-    
-    /**
-     * Checks if the user id has been found, or we have to keep the serach on
-     * @param currentProviderId
-     * @param linkedDataIterator
-     * @return 
-     */
+        
     private boolean providerUserIdFoundOrSearchCollectionNotEmpty(
             String currentProviderId, 
             Iterator<UserLinkFromProviderResponseData> linkedDataIterator)
     {
         return ((linkedDataIterator.hasNext()) && (currentProviderId == null));
     }
-    
-    /**
-     * Gets the user id from the provider, is the linked data corresponfs to the right provider
-     * @param provider
-     * @param linkedData
-     * @return 
-     */
+        
     private String getExternalUserIdIfProviderMatches(String provider, UserLinkFromProviderResponseData linkedData){
         String providerUserId = null;
         

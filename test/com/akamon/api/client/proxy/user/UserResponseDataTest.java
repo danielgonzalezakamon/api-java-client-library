@@ -16,10 +16,10 @@ public class UserResponseDataTest {
     public void testGetFacebookId()
     {
         String expectedFacebookUserId = "10";
+        
         UserResponseData responseData = new UserResponseData();
         List <UserLinkFromProviderResponseData> linKFromProviders = 
-                createUserLinkFromProvider(UserResponseData.PROVIDER_FACEBOOK, expectedFacebookUserId);
-        
+                createUserLinkFromProvider(UserResponseData.PROVIDER_FACEBOOK, expectedFacebookUserId);        
         responseData.setLinks_from_providers(linKFromProviders);
         
         String obtainedFacebookUserId = responseData.getFacebookUserId();
@@ -27,6 +27,20 @@ public class UserResponseDataTest {
         assertEquals("Facebook user does not match", expectedFacebookUserId, obtainedFacebookUserId);
     }
     
+    @Test
+    public void testGetFacebookIdWhenEmptyProviderInfoData()
+    {
+        String expectedFacebookUserId = null;
+        
+        UserResponseData responseData = new UserResponseData();
+        List <UserLinkFromProviderResponseData> linKFromProviders = new ArrayList();
+        responseData.setLinks_from_providers(linKFromProviders);
+        
+        String obtainedFacebookUserId = responseData.getFacebookUserId();
+        
+        assertEquals("Facebook user not null", expectedFacebookUserId, obtainedFacebookUserId);
+    }
+            
     private List <UserLinkFromProviderResponseData>  createUserLinkFromProvider(String providerName, String providerUserId)
     {
         List <UserLinkFromProviderResponseData> linKFromProviders = new ArrayList();
