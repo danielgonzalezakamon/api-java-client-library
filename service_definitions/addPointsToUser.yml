@@ -1,0 +1,16 @@
+addPointsToUser:
+  code: 24
+  method: POST
+  url: http://dev-api.akamon.com/app_dev.php/game/{gameId}/user/{publicUserId}/points/{points}
+  format: application/json
+  instance: Akamon\ServicesBundle\Services\Games\GamesService
+  params:
+    gameId:
+      type: string
+      required: true
+    publicUserId:
+      type: string
+      required: true
+    points:
+      type: integer
+      required: true
