@@ -4,6 +4,7 @@ import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.test.BaseTest;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,7 +25,9 @@ public class UserProxyTest extends BaseTest {
     public void testCreateUserSession() throws Exception {
         System.out.println("createUserSession");
         
-        UserProxy proxy = new UserProxy (createAuthObject());
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        
+        UserProxy proxy = new UserProxy (createAuthObject(), logger);
         UserSessionResponseData session = proxy.createUserSession ("carles");
         
         assertNotNull("No session object obtained from server", session);

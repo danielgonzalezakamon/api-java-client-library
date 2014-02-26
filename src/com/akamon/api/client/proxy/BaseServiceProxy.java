@@ -19,15 +19,19 @@ public abstract class BaseServiceProxy  {
     private AuthData authData = null;
     
     private ICallableServiceFactory serviceFactory = null;
-    
-    protected BaseServiceProxy(AuthData authData){
+            
+    protected BaseServiceProxy(AuthData authData, java.util.logging.Logger logger){
         this.authData = authData;
         
         HashMap<String,Object> factoryOptions = new LinkedHashMap();
         factoryOptions.put(CallableServiceFactory.AUTH_DATA_KEY, this.authData);
         
-        serviceFactory = new CallableServiceFactory(factoryOptions);        
+        serviceFactory = new CallableServiceFactory(factoryOptions, logger);        
     }
+    
+    protected BaseServiceProxy(AuthData authData){
+        this(authData, null);
+    }        
     
     /**
      * Invokes a service

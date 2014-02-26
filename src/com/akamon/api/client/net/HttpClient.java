@@ -9,12 +9,15 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.logging.Level;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.io.IOUtils;
@@ -30,8 +33,11 @@ import org.apache.http.client.fluent.Request;
 public class HttpClient {
    private String appCode;
    private String appToken;
+   private java.util.logging.Logger logger;
    
    private final static HashMap<String, String> httpMethods;
+   
+   private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
    
    static {
        httpMethods = new HashMap();
@@ -46,9 +52,14 @@ public class HttpClient {
     * @param appCode Public identifier
     * @param appToken Secret token
     */
-   public HttpClient(String appCode, String appToken){
+   public HttpClient(String appCode, String appToken, java.util.logging.Logger logger){
        this.appCode = appCode;
-       this.appToken = appToken;        
+       this.appToken = appToken;   
+       this.logger = logger;
+   }
+   
+   public HttpClient(String appCode, String appToken) {
+       this(appCode, appToken, null);
    }
    
    /**
@@ -67,18 +78,29 @@ public class HttpClient {
        
        if (!isValidUrl(url)){
            throw new InvalidHttpUrlException(url);
-       }
+       }             
+              
+       Thread currentThread = Thread.currentThread();
+       String threadName = Thread.currentThread().getName();                        
+       String threadPoolName = currentThread.getThreadGroup().getName();     
+       
+       long requestId = RequestIdGenerator.createRequestIdGenerator().nextRequestId();       
+       long startTime = System.currentTimeMillis();       
+       
+       Date requestInitDate = new Date();
+       
+       log("Executing " + url + " " + method + " thread " + threadName + " thread pool " + threadPoolName);
        
        try {       
-            method = method.toUpperCase();
-
+            method = method.toUpperCase();                           
+            
             int ts = getUtcTimestamp(new Date());
             String firma = calculateSign(parameters, ts);
 
             Request req = createHttpRequest(method, url);
             req.addHeader("Accept", "application/json");
             req.addHeader("X-Akamon-AppCode", appCode);
-            req.addHeader("X-Akamon-RequestId", "1");
+            req.addHeader("X-Akamon-RequestId", Long.toString(requestId));
             req.addHeader("X-Akamon-Ts", "" + ts);
             req.addHeader("X-Akamon-Signature", firma);
 
@@ -94,10 +116,33 @@ public class HttpClient {
             String body = IOUtils.toString(is, "UTF-8");
             
             return new HttpResponseData(status_code, body);
-       }
-       catch (Exception e){
-           throw new HttpRequestException("Error executing an http request: (" + method + ") : " + url, e);
        }       
+       catch (Exception e){
+           log(threadName + "." + threadPoolName + " Error in the " + method + " invokation : " + e.getClass().getName() + " - " + e.getMessage());
+           log(threadName + "." + threadPoolName + " Request id " + requestId);
+           log(threadName + "." + threadPoolName + " url " + url);
+           log(threadName + "." + threadPoolName + " parameters " + requestParametersToString(parameters));
+           log(threadName + "." + threadPoolName + " request started at " + dateFormat.format(requestInitDate));
+           
+           throw new HttpRequestException("Error executing an http request: (" + method + ") : " + url, e);
+       } 
+       finally {    
+           long elapsedTime = System.currentTimeMillis() - startTime;
+           log("Concluded execution " + method + " thread " + threadName + " thread pool " + threadPoolName + " elapsed milliseconds " + elapsedTime);
+       }
+   }
+   
+   private String requestParametersToString(NameValuePair[] parameters){
+       StringBuilder stringified = new StringBuilder();
+       
+       for (NameValuePair param : parameters){           
+           stringified.append(param.getName());
+           stringified.append("=");
+           stringified.append(param.getValue());
+           stringified.append("&");
+       }
+       
+       return stringified.toString();
    }
    
    /**
@@ -244,5 +289,12 @@ public class HttpClient {
         
         return ((int) (date.getTime() / 1000L)) + (offsetHrs * 3600) + (offsetMins * 60);                        
     }
+   
+   private void log(String message){
+        if ( this.logger != null ){
+            Date now = new Date();
+            this.logger.log(Level.INFO, dateFormat.format(now) + " " + message);
+        } 
+   }
    
 }

@@ -37,7 +37,10 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     
     private ServiceConfigManager manager;
     
-    private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");             
+    java.util.logging.Logger logger;
+    
+    private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");        
+    
     
     /**
      * Builds the object
@@ -45,7 +48,9 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
      * @param authData Authentication data object
      * @throws ServiceDefinitionException 
      */
-    public RemoteHttpCallableService(String serviceCode, AuthData authData) throws ServiceDefinitionException{
+    public RemoteHttpCallableService(String serviceCode, AuthData authData, java.util.logging.Logger logger) throws ServiceDefinitionException {
+        this.logger = logger;
+        
         setServiceCode(serviceCode);
         setAuthData(authData);
         setHttpMethod(httpMethod);
@@ -61,6 +66,10 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             setUrl(serviceUrl.toString());
             setHttpMethod(serviceMethod.toString());
         }        
+    }
+    
+    public RemoteHttpCallableService(String serviceCode, AuthData authData) throws ServiceDefinitionException {
+        this(serviceCode, authData, null);
     }
     
     /**
@@ -145,6 +154,12 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         this.url = url;
     }
     
+    private void log(String message){
+        if ( this.logger != null ){
+            this.logger.log(Level.INFO, message);
+        } 
+    }
+    
     /**
      * Validates the request parameters
      * @param invokationData Data to send with the request
@@ -171,7 +186,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
             String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
             
-            HttpClient client = new HttpClient(getAppCode(), getAppToken());
+            HttpClient client = new HttpClient(getAppCode(), getAppToken(), this.logger);
             HttpResponseData response = client.execute(serviceUrl, getHttpMethod(), httpParams);            
             int responseCode = response.getResponseCode();
             String responseString = response.getResponseString();
@@ -185,12 +200,15 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             
         }
         catch (ServiceDefinitionException sde){
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceDefinitionException: " + sde.getMessage());
             throw sde;
         }
         catch (ServiceInvocationException sie){
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceInvocationException: " + sie.getMessage());
             throw sie;
         }
         catch (Exception e){
+            log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage());
             throw new ServiceInvocationException(this.getServiceCode(), e);
         }                                     
         
