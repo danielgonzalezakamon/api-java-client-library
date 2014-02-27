@@ -20,10 +20,16 @@ public class ExperimentProxy extends BaseServiceProxy
 	/**
 	 * Constructor
 	 * @param paramAuthData
+         * @param logger
 	 */
-	public ExperimentProxy(AuthData paramAuthData)
+	public ExperimentProxy(AuthData paramAuthData, java.util.logging.Logger logger)
 	{
-		super(paramAuthData);
+            super(paramAuthData, logger);
+	}
+        
+        public ExperimentProxy(AuthData paramAuthData)
+	{
+            super(paramAuthData, null);
 	}
 
 	/**

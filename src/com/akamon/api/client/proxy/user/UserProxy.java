@@ -15,8 +15,12 @@ import java.util.HashMap;
  */
 public class UserProxy extends BaseServiceProxy { 
                     
+    public UserProxy(AuthData authData, java.util.logging.Logger logger){
+        super(authData, logger);
+    }
+    
     public UserProxy(AuthData authData){
-        super(authData);
+        this(authData, null);
     }
     
     /**

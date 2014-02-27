@@ -16,13 +16,14 @@ public class CallableServiceFactory implements ICallableServiceFactory {
     
     private AuthData authData = null;
     
-    private RemoteHttpCallableServiceFactory httpFactory = null;
+    private RemoteHttpCallableServiceFactory httpFactory = null;    
 
     /**
      * Creates thefactory
      * @param options If a key "AUTH_DATA" exists, it's used for the authentication
      */
-    public CallableServiceFactory(HashMap<String,Object> options){
+    public CallableServiceFactory(HashMap<String,Object> options, java.util.logging.Logger logger){        
+        
         if ( (options != null) && (options.containsKey(AUTH_DATA_KEY)) ){
            Object oAuthData =  options.get(AUTH_DATA_KEY);
            
@@ -31,8 +32,12 @@ public class CallableServiceFactory implements ICallableServiceFactory {
            }
         }
         
-        httpFactory = new RemoteHttpCallableServiceFactory(this.authData);
-    }       
+        httpFactory = new RemoteHttpCallableServiceFactory(this.authData, logger);
+    }      
+    
+    public CallableServiceFactory(HashMap<String,Object> options){
+        this(options, null);
+    }
     
     /**
      * Load a callable service

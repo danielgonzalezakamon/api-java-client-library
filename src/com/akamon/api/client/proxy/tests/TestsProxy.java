@@ -13,8 +13,12 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
  */
 public class TestsProxy extends BaseServiceProxy {      
     
+    public TestsProxy(AuthData authData, java.util.logging.Logger logger){
+        super(authData, logger);
+    }
+    
     public TestsProxy(AuthData authData){
-        super(authData);
+        super(authData, null);
     }
     
     /**

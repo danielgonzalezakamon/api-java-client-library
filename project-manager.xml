@@ -8,8 +8,8 @@
     <property name="dist"  value="dist"/>
     <property name="doc"  value="doc"/>
     
-    <property name="version_base"  value="0.1"/>
-    <property name="version_proxy"  value="0.6"/>
+    <property name="version_base"  value="0.2"/>
+    <property name="version_proxy"  value="0.7"/>
     
     <property name="jar_name_base"  value="akamon-api-client-base-${version_base}.jar"/>
     <property name="jar_name_proxy"  value="akamon-api-client-proxy-${version_proxy}.jar"/>

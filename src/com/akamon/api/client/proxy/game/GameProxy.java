@@ -13,8 +13,12 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
  */
 public class GameProxy extends BaseServiceProxy { 
                     
+    public GameProxy(AuthData authData, java.util.logging.Logger logger){
+        super(authData, logger);
+    }
+    
     public GameProxy(AuthData authData){
-        super(authData);
+        super(authData, null);
     }
     
     /**
