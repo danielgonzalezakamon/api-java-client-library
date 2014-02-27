@@ -92,9 +92,12 @@ public class HttpClient {
        
        String logPreffix = buildRequestLogIdentifier(requestId, threadName, threadPoolName);
        
-       log(logPreffix + " request start");       
+       StringBuilder logTextBuilder = new StringBuilder(logPreffix);
+       logTextBuilder.append(" request start");
        
-       try {       
+       log(logTextBuilder.toString());       
+       
+       try {                  
             method = method.toUpperCase();                           
             
             int ts = getUtcTimestamp(new Date());
@@ -121,18 +124,34 @@ public class HttpClient {
             return new HttpResponseData(status_code, body);
        }       
        catch (Exception e){
-           log(logPreffix + " Error in the " + method + " invokation : " + e.getClass().getName() + " - " + e.getMessage());
-           log(logPreffix + " Request id " + requestId);
-           log(logPreffix + " url " + url);
-           log(logPreffix + " parameters " + requestParametersToString(parameters));           
+           logRequestInfoOnError(logPreffix, e, url, method, parameters);               
            
            throw new HttpRequestException("Error executing an http request: (" + method + ") : " + url, e);
        } 
        finally {    
-           long elapsedTime = System.currentTimeMillis() - startTime;           
-           log(logPreffix + " end request started at " + dateFormat.format(requestInitDate) + " elapsed milliseconds " + elapsedTime);
+           long elapsedTime = System.currentTimeMillis() - startTime;  
+           
+           logTextBuilder.delete(0, logTextBuilder.length());
+           logTextBuilder.append(logPreffix).append(" end request started at ").append(dateFormat.format(requestInitDate)).append(" elapsed milliseconds ").append(elapsedTime);
+           log(logTextBuilder.toString());           
        }
    }
+   
+   private void logRequestInfoOnError(String logPreffix, Exception e, String url, String method, NameValuePair[] parameters){
+       
+       StringBuilder logTextBuilder = new StringBuilder();
+              
+       logTextBuilder.append(logPreffix).append("Error in the ").append(method).append(" invokation : ").append(e.getClass().getName()).append(" - ").append(e.getMessage());
+       log(logTextBuilder.toString());                     
+                      
+       logTextBuilder.delete(0, logTextBuilder.length());
+       logTextBuilder.append(logPreffix).append(" url ").append(url);
+       log(logTextBuilder.toString());
+           
+       logTextBuilder.delete(0, logTextBuilder.length());
+       logTextBuilder.append(logPreffix).append(" parameters ").append(requestParametersToString(parameters));
+       log(logTextBuilder.toString());                      
+   }   
    
    private String buildRequestLogIdentifier(long requestId, String threadName, String threadPoolName)
    {
