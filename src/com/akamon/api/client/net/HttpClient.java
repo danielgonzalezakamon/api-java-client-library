@@ -84,12 +84,15 @@ public class HttpClient {
        String threadName = Thread.currentThread().getName();                        
        String threadPoolName = currentThread.getThreadGroup().getName();     
        
-       long requestId = RequestIdGenerator.createRequestIdGenerator().nextRequestId();       
+       long requestId = RequestIdGenerator.createRequestIdGenerator().nextRequestId();         
+       
        long startTime = System.currentTimeMillis();       
        
        Date requestInitDate = new Date();
        
-       log("Executing " + url + " " + method + " thread " + threadName + " thread pool " + threadPoolName);
+       String logPreffix = buildRequestLogIdentifier(requestId, threadName, threadPoolName);
+       
+       log(logPreffix + " request start");       
        
        try {       
             method = method.toUpperCase();                           
@@ -118,18 +121,25 @@ public class HttpClient {
             return new HttpResponseData(status_code, body);
        }       
        catch (Exception e){
-           log(threadName + "." + threadPoolName + " Error in the " + method + " invokation : " + e.getClass().getName() + " - " + e.getMessage());
-           log(threadName + "." + threadPoolName + " Request id " + requestId);
-           log(threadName + "." + threadPoolName + " url " + url);
-           log(threadName + "." + threadPoolName + " parameters " + requestParametersToString(parameters));
-           log(threadName + "." + threadPoolName + " request started at " + dateFormat.format(requestInitDate));
+           log(logPreffix + " Error in the " + method + " invokation : " + e.getClass().getName() + " - " + e.getMessage());
+           log(logPreffix + " Request id " + requestId);
+           log(logPreffix + " url " + url);
+           log(logPreffix + " parameters " + requestParametersToString(parameters));           
            
            throw new HttpRequestException("Error executing an http request: (" + method + ") : " + url, e);
        } 
        finally {    
-           long elapsedTime = System.currentTimeMillis() - startTime;
-           log("Concluded execution " + method + " thread " + threadName + " thread pool " + threadPoolName + " elapsed milliseconds " + elapsedTime);
+           long elapsedTime = System.currentTimeMillis() - startTime;           
+           log(logPreffix + " end request started at " + dateFormat.format(requestInitDate) + " elapsed milliseconds " + elapsedTime);
        }
+   }
+   
+   private String buildRequestLogIdentifier(long requestId, String threadName, String threadPoolName)
+   {
+       StringBuilder builder = new StringBuilder();
+       builder.append("reqId: ").append(requestId).append(" ").append(threadName).append(".").append(threadPoolName).append(" ");      
+       
+       return builder.toString();
    }
    
    private String requestParametersToString(NameValuePair[] parameters){

@@ -37,6 +37,11 @@ public class RequestIdGenerator {
     private void setNextRequestIdFromRandom(){
         Random random = new Random();
         this.lastRequestId = random.nextLong();
+        final boolean isNegative = this.lastRequestId < 0;
+        
+        if (isNegative){
+            this.lastRequestId = - this.lastRequestId;
+        }
     }
     
     private void setNextRequestIdFromLastValue(){
