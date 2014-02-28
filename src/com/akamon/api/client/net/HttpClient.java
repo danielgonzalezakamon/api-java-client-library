@@ -70,7 +70,7 @@ public class HttpClient {
     * @return Response from server
     * @throws HttpRequestException 
     */ 
-   public HttpResponseData execute(String url, String method, NameValuePair[] parameters) throws HttpRequestException {
+   public HttpResponseData execute(String url, String method, NameValuePair[] parameters) throws HttpRequestException {      
        
        if (!isValidHttpMethod(method)) {
            throw new InvalidHttpMethodException(method);
@@ -121,6 +121,13 @@ public class HttpClient {
             InputStream is = entity.getContent();
             String body = IOUtils.toString(is, "UTF-8");
             
+            log(logPreffix + 
+                    "requestId: " + requestId + "\n" + 
+                    "firma: " + firma + "\n" + 
+                    "parameters: " + requestParametersToString(parameters) + "\n" +                    
+                    "timestamp: " + ts + "\n" +  
+                    body);
+            
             return new HttpResponseData(status_code, body);
        }       
        catch (Exception e){
@@ -134,7 +141,7 @@ public class HttpClient {
            logTextBuilder.delete(0, logTextBuilder.length());
            logTextBuilder.append(logPreffix).append(" end request started at ").append(dateFormat.format(requestInitDate)).append(" elapsed milliseconds ").append(elapsedTime);
            log(logTextBuilder.toString());           
-       }
+       }    
    }
    
    private void logRequestInfoOnError(String logPreffix, Exception e, String url, String method, NameValuePair[] parameters){
@@ -142,15 +149,15 @@ public class HttpClient {
        StringBuilder logTextBuilder = new StringBuilder();
               
        logTextBuilder.append(logPreffix).append("Error in the ").append(method).append(" invokation : ").append(e.getClass().getName()).append(" - ").append(e.getMessage());
-       log(logTextBuilder.toString());                     
+       log(logTextBuilder.toString(), Level.SEVERE);                     
                       
        logTextBuilder.delete(0, logTextBuilder.length());
        logTextBuilder.append(logPreffix).append(" url ").append(url);
-       log(logTextBuilder.toString());
+       log(logTextBuilder.toString(), Level.SEVERE);
            
        logTextBuilder.delete(0, logTextBuilder.length());
        logTextBuilder.append(logPreffix).append(" parameters ").append(requestParametersToString(parameters));
-       log(logTextBuilder.toString());                      
+       log(logTextBuilder.toString(), Level.SEVERE);                      
    }   
    
    private String buildRequestLogIdentifier(long requestId, String threadName, String threadPoolName)
@@ -259,44 +266,15 @@ public class HttpClient {
         else if ( (query.length() > 0) && (query.charAt(0) == '?') )
         {
             query = query.substring(1);
-        }                              
-                       
-        return buildHmacSignature(appToken, query.toLowerCase() + ts);       
-    }
-   
-   /**
-    * Calculates the hashHmac signature
-    * @param pKey Seed
-    * @param pStringToSign Data to be signed
-    * @return Signature
-    * @throws InvalidKeyException 
-    */
-    private String buildHmacSignature(String pKey, String pStringToSign) throws InvalidKeyException {
-      String lSignature = "";
-      try
-      {
-        Mac lMac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec lSecret = new SecretKeySpec(pKey.getBytes(), "HmacSHA256");
-        lMac.init(lSecret);
-
-        byte[] lDigest = lMac.doFinal(pStringToSign.getBytes());
-        BigInteger lHash = new BigInteger(1, lDigest);
-        lSignature = lHash.toString(16);
-        if ((lSignature.length() % 2) != 0) {
-          lSignature = "0" + lSignature;
-        }
-      }
-      catch (NoSuchAlgorithmException lEx)
-      {
-        throw new RuntimeException("Problems calculating HMAC", lEx);
-      }
-      catch (InvalidKeyException lEx)
-      {
-        throw new RuntimeException("Problems calculating HMAC", lEx);
-      }
-
-      return lSignature;
-   }      
+        }  
+        
+        StringBuilder dataToBeSigned = new StringBuilder(query.toLowerCase());
+        dataToBeSigned.append(ts);                
+        
+        Signer signer = new Signer(appToken);
+        
+        return signer.generateSignature(dataToBeSigned.toString());                              
+    }            
    
    /**
     * Gets the unix timestamp, int the GMT timezone, for the given date
@@ -319,11 +297,20 @@ public class HttpClient {
         return ((int) (date.getTime() / 1000L)) + (offsetHrs * 3600) + (offsetMins * 60);                        
     }
    
-   private void log(String message){
+   private void log(String message, Level level){
         if ( this.logger != null ){
             Date now = new Date();
-            this.logger.log(Level.INFO, dateFormat.format(now) + " " + message);
+            StringBuilder messageBuilder = new StringBuilder();            
+            
+            messageBuilder.append(dateFormat.format(now));
+            messageBuilder.append(" ");
+            messageBuilder.append(message);
+            
+            this.logger.log(level, messageBuilder.toString());
         } 
    }
    
+   private void log(String message){
+        log(message, Level.CONFIG);
+   }   
 }
