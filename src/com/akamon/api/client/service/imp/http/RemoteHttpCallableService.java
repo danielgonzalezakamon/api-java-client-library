@@ -11,7 +11,10 @@ import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.service.error.BadHttpResponseInvocationException;
 import com.akamon.api.client.service.validation.ServiceValidator;
 import com.akamon.api.client.error.ServiceInvocationException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
@@ -26,6 +29,8 @@ import org.apache.http.message.BasicNameValuePair;
  * @author Miguel Angel Garcia
  */
 public class RemoteHttpCallableService implements IRemoteHttpCallableService {
+    
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
     private String serviceCode;
     
@@ -154,11 +159,22 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         this.url = url;
     }
     
-    private void log(String message){
+    private void log(String message, Level level){
         if ( this.logger != null ){
-            this.logger.log(Level.INFO, message);
+            Date now = new Date();
+            StringBuilder messageBuilder = new StringBuilder();            
+            
+            messageBuilder.append(dateFormat.format(now));
+            messageBuilder.append(" ");
+            messageBuilder.append(message);
+            
+            this.logger.log(level, messageBuilder.toString());
         } 
-    }
+   }
+   
+   private void log(String message){
+        log(message, Level.FINE);
+   }   
     
     /**
      * Validates the request parameters
@@ -182,6 +198,8 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableResponse callableResponse = null;
         
+        synchronized(RemoteHttpCallableService.class){
+        
         try {                      
             NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
             String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
@@ -200,17 +218,18 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             
         }
         catch (ServiceDefinitionException sde){
-            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceDefinitionException: " + sde.getMessage());
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceDefinitionException: " + sde.getMessage(), Level.SEVERE);
             throw sde;
         }
         catch (ServiceInvocationException sie){
-            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceInvocationException: " + sie.getMessage());
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceInvocationException: " + sie.getMessage(), Level.SEVERE);
             throw sie;
         }
         catch (Exception e){
-            log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage());
+            log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage(), Level.SEVERE);
             throw new ServiceInvocationException(this.getServiceCode(), e);
-        }                                     
+        }           
+        }
         
         return callableResponse;    
     }
