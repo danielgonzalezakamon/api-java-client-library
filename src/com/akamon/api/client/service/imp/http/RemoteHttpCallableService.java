@@ -197,9 +197,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     @Override
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableResponse callableResponse = null;
-        
-        synchronized(RemoteHttpCallableService.class){
-        
+                        
         try {                      
             NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
             String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
@@ -228,8 +226,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         catch (Exception e){
             log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage(), Level.SEVERE);
             throw new ServiceInvocationException(this.getServiceCode(), e);
-        }           
-        }
+        }        
         
         return callableResponse;    
     }
