@@ -5,9 +5,6 @@ import com.akamon.api.client.service.imp.http.error.BadJsonResponseInvocationExc
 import com.akamon.api.client.util.JsonUtility;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.internal.LinkedTreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class that encapsulates a json response obtained from the rest api service
@@ -26,23 +23,43 @@ public class JsonCallableResponse extends BaseCallableResponse {
     public JsonCallableResponse(String serviceCode, Object rawData) throws Exception{
         super(serviceCode, rawData);
         
-        String jsonString = (rawData == null) ? "" : rawData.toString();
-        
-        if (jsonString.equals("")) {
-            throw new BadJsonResponseInvocationException(serviceCode, jsonString);
-        }
+        String jsonString = (rawData == null) ? "" : rawData.toString();                
                         
         JsonUtility json = new JsonUtility();
         jsonData = json.fromJson(jsonString, JsonCallableResponseBean.class);
-        
-        if ( (jsonData == null) || (jsonData.getErrorCode() == null) || (jsonData.getErrorString() == null) 
-                || (jsonData.getResponseData() == null)  || (!(jsonData.getResponseData() instanceof com.google.gson.internal.LinkedTreeMap))  )
-        {
-            throw new BadJsonResponseInvocationException(serviceCode, jsonString);
-        }  
+                
+        checkJsonData(serviceCode, jsonString);
         
         setResponseData(jsonData.getResponseData());        
-    }        
+    }  
+    
+    private void checkJsonData(String serviceCode, String jsonString) throws BadJsonResponseInvocationException {
+        boolean notValidJson = !isValidJsonData();
+        if (notValidJson){
+            throw new BadJsonResponseInvocationException(serviceCode, jsonString   );
+        }        
+    }
+    
+    private boolean isValidJsonData(){
+        Integer errorCode = null;
+        String errorString = null;
+        Object responseData = null;
+        boolean dataWasParsed = (jsonData != null );
+        
+        if (dataWasParsed){
+            errorCode = jsonData.getErrorCode();
+            errorString = jsonData.getErrorString();
+            responseData = jsonData.getResponseData();
+        }
+                        
+        boolean definedErrorCode = (errorCode != null);
+        boolean definedErrorString = (errorString != null);
+        boolean definedResponseData = (responseData != null);      
+        
+        boolean validResponse = ( (definedErrorCode) && (definedErrorString) && (definedResponseData) ); 
+        
+        return validResponse;
+    }
 
     /**
      * Gets the error code (0 if everything went ok)
@@ -73,8 +90,6 @@ public class JsonCallableResponse extends BaseCallableResponse {
         JsonUtility json = new JsonUtility();                 
          
         String jsonRawResData = json.toJson(getResponseData());               
-        return json.fromJson(jsonRawResData, destinationClass);
-        
-    }
-    
+        return json.fromJson(jsonRawResData, destinationClass);        
+    }    
 }
