@@ -11,6 +11,7 @@ import com.akamon.api.client.proxy.offer.error.OfferInvalidTokenForUserException
 import com.akamon.api.client.proxy.offer.error.OfferUsedException;
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ICallableResponse;
+import com.akamon.api.client.service.error.BadHttpResponseInvocationException;
 import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import com.google.gson.JsonParseException;
 import java.util.logging.Logger;
@@ -76,6 +77,11 @@ public class AwakeUserProxy extends BaseServiceProxy {
             translateToSpecificOfferDomainException(sie.getServiceErrorCode());
             
             throw sie;
+        }
+        catch (BadHttpResponseInvocationException bre){            
+            translateToSpecificOfferDomainException(bre.getServiceErrorCode());
+            
+            throw bre;            
         }
         
         return response;
