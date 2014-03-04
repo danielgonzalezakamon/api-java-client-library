@@ -1,0 +1,2 @@
+JDBC_CLASS_NAME=com.mysql.jdbc.Driver
+JDBC_URL=jdbc:mysql://bd-mundijuegos/mundijuegos?user=acceso&password=acceso"
