@@ -1,5 +1,6 @@
 package com.akamon.api.client.proxy;
 
+import com.akamon.api.client.error.ServiceInternalError;
 import com.akamon.api.client.error.ServiceInvocationException;
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.CallableServiceFactory;
@@ -7,6 +8,7 @@ import com.akamon.api.client.service.ICallableResponse;
 import com.akamon.api.client.service.ICallableService;
 import com.akamon.api.client.service.ICallableServiceFactory;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
+import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -41,9 +43,31 @@ public abstract class BaseServiceProxy  {
      * @throws ServiceDefinitionException
      * @throws ServiceInvocationException 
      */
-    public ICallableResponse invoke(String serviceCode, Object[] parameters) throws ServiceDefinitionException, ServiceInvocationException{
+    public ICallableResponse invoke(String serviceCode, Object[] parameters) throws ServiceDefinitionException, ServiceInvocationException {
         ICallableService service = this.serviceFactory.loadCallableService(serviceCode);
         
-        return service.invoke(parameters);
+        ICallableResponse response = service.invoke(parameters);
+        
+        checkServiceInternalError(serviceCode, response);
+        
+        return response;
     }            
+    
+    private void checkServiceInternalError(String serviceCode, ICallableResponse serviceResponse) throws ServiceInternalError{
+        final boolean isNotAJsonResponse = ! (serviceResponse instanceof JsonCallableResponse);
+        
+        if (isNotAJsonResponse) return; 
+        
+        JsonCallableResponse jsonResponse = (JsonCallableResponse) serviceResponse;
+        
+        int errorCode = jsonResponse.getErrorCode();
+        String errorString = jsonResponse.getErrorString();
+        
+        final int noErrorCode = 0;
+        final boolean anErrorOccurred = (errorCode != noErrorCode);
+        
+        if (anErrorOccurred){
+            throw new ServiceInternalError(serviceCode, errorCode, errorString);
+        }
+    }
 }
