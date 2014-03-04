@@ -11,6 +11,7 @@ import com.akamon.api.client.service.ServiceConfigManager;
 import com.akamon.api.client.service.error.BadHttpResponseInvocationException;
 import com.akamon.api.client.service.validation.ServiceValidator;
 import com.akamon.api.client.error.ServiceInvocationException;
+import com.akamon.api.client.service.error.HttpServiceResponseData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -197,9 +198,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     @Override
     public ICallableResponse invoke(Object[] invokationData) throws ServiceDefinitionException, ServiceInvocationException{
         ICallableResponse callableResponse = null;
-        
-        synchronized(RemoteHttpCallableService.class){
-        
+                        
         try {                      
             NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
             String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
@@ -209,13 +208,7 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             int responseCode = response.getResponseCode();
             String responseString = response.getResponseString();
             
-            if ( (responseCode < 200) || (responseCode > 299) ){
-                throw new BadHttpResponseInvocationException(getServiceCode(), responseString,responseCode);                
-            }
-            else {
-                callableResponse = new JsonCallableResponse(getServiceCode(), responseString);
-            }
-            
+            callableResponse = buildResponse(responseCode, responseString);                                    
         }
         catch (ServiceDefinitionException sde){
             log("API-client-library (invoke " + this.getServiceCode() + ") ServiceDefinitionException: " + sde.getMessage(), Level.SEVERE);
@@ -228,10 +221,34 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         catch (Exception e){
             log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage(), Level.SEVERE);
             throw new ServiceInvocationException(this.getServiceCode(), e);
-        }           
-        }
+        }        
         
         return callableResponse;    
+    }
+    
+    private ICallableResponse buildResponse(int responseCode, String responseString) throws Exception
+    {
+        JsonCallableResponse callableResponse = new JsonCallableResponse(getServiceCode(), responseString);
+        
+        if ( (responseCode < 200) || (responseCode > 299) ){
+            HttpServiceResponseData responseData = new HttpServiceResponseData();
+            responseData.setHttpResponseBody(responseString);
+            responseData.setHttpResponseCode(responseCode);
+            responseData.setHttpResponseFormat(getFormat());
+            responseData.setServiceCode(getServiceCode());
+            responseData.setServiceErrorCode(responseCode);
+                
+            callableResponse = new JsonCallableResponse(getServiceCode(), responseString);
+            callableResponse.getErrorCode();
+            callableResponse.getErrorString();
+                
+            responseData.setServiceErrorCode(callableResponse.getErrorCode());
+            responseData.setServiceErrorString(callableResponse.getErrorString());
+                
+            throw new BadHttpResponseInvocationException(responseData);                
+        }
+                
+        return callableResponse;
     }
     
     /**

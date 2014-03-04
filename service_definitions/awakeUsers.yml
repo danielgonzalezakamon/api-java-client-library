@@ -1,0 +1,12 @@
+awakeUsers:
+  service: awakeUsers
+  code: 28
+  method: GET
+  format: application/json 
+  url: http://dev-api.mundijuegos.servidor/app_dev.php/awake/user/{publicUserId}/game/{gameId}
+  params:
+    publicUserId:
+      type: string
+      required: true
+    gameId:
+      type: integer

@@ -2,16 +2,21 @@ package com.akamon.api.client.test;
 
 import com.akamon.api.client.security.AuthData;
 import com.akamon.api.client.service.ServiceConfigManager;
+import java.io.IOException;
+import java.sql.SQLException;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  * Basic class to extend for every test 
  * 
- * @author Miguel Angel Garcia
  */
 public class BaseTest {
-            
+    
+    private static DatabaseManager databaseManager = null;
+                    
     public BaseTest ()
     {         
          ServiceConfigManager.registerConfigDir("service_definitions");
@@ -29,5 +34,21 @@ public class BaseTest {
    @Test
     public void testOK() {
         assertTrue (true);
+    }        
+    
+    @AfterClass 
+    public static void closeDatabaseConnection () throws SQLException {
+        if (databaseManager != null){
+            databaseManager.disconnect();
+        }
+    }
+    
+    protected DatabaseManager getDatabaseManager() throws IOException, ClassNotFoundException {
+        
+        if (databaseManager == null){
+            databaseManager = DatabasePool.getConnection();
+        }
+        
+        return databaseManager;
     }
 }
