@@ -53,10 +53,9 @@ public class JsonCallableResponse extends BaseCallableResponse {
         }
                         
         boolean definedErrorCode = (errorCode != null);
-        boolean definedErrorString = (errorString != null);
-        boolean definedResponseData = (responseData != null);      
+        boolean definedErrorString = (errorString != null);        
         
-        boolean validResponse = ( (definedErrorCode) && (definedErrorString) && (definedResponseData) ); 
+        boolean validResponse = ( (definedErrorCode) && (definedErrorString) ); 
         
         return validResponse;
     }

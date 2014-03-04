@@ -10,14 +10,20 @@ public class BadHttpResponseInvocationException extends BadResponseInvocationExc
 {
     private int httpResponseCode = 0;
     
+    private String httpResponseFormat;
+    
+    private int serviceErrorCode;
+    
+    private String serviceErrorString; 
+    
     /**
      * Buils the exception
      * @param serviceCode Operation service code
      * @param rawResponse Raw response obtained from server
      * @param httpResponseCode http response code
-     */
-    public BadHttpResponseInvocationException(String serviceCode, String rawResponse, int httpResponseCode){
-        this(serviceCode, rawResponse, httpResponseCode, null);
+     */    
+    public BadHttpResponseInvocationException(HttpServiceResponseData httpServiceResponseData){
+        this(httpServiceResponseData, null);
     }
     
     /**
@@ -27,10 +33,13 @@ public class BadHttpResponseInvocationException extends BadResponseInvocationExc
      * @param httpResponseCode http response code
      * @param t Previous generated error
      */
-    public BadHttpResponseInvocationException(String serviceCode, String rawResponse, int httpResponseCode, Throwable t){
-        super(serviceCode, rawResponse, t);
+    public BadHttpResponseInvocationException(HttpServiceResponseData httpServiceResponseData, Throwable t){
+        super(httpServiceResponseData.getServiceCode(), httpServiceResponseData.getHttpResponseBody(), t);
         
-        setHttpResponseCode(httpResponseCode);
+        httpResponseCode = httpServiceResponseData.getHttpResponseCode();
+        httpResponseFormat = httpServiceResponseData.getHttpResponseFormat();
+        serviceErrorCode = httpServiceResponseData.getServiceErrorCode();
+        serviceErrorString = httpServiceResponseData.getServiceErrorString();
     }
 
     /**
@@ -41,10 +50,24 @@ public class BadHttpResponseInvocationException extends BadResponseInvocationExc
     }
 
     /**
-     * @param httpResponseCode the httpResponseCode to set
+     * @return the httpResponseFormat
      */
-    private void setHttpResponseCode(int httpResponseCode) {
-        this.httpResponseCode = httpResponseCode;
+    public String getHttpResponseFormat() {
+        return httpResponseFormat;
     }
+
+    /**
+     * @return the serviceErrorCode
+     */
+    public int getServiceErrorCode() {
+        return serviceErrorCode;
+    }
+
+    /**
+     * @return the serviceErrorString
+     */
+    public String getServiceErrorString() {
+        return serviceErrorString;
+    }       
     
 }
