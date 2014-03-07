@@ -56,8 +56,8 @@ public class QueryStringBuilder {
     /**
      * Default encoding used when no encoding is defined as parameter. The
      * encoding is retrieved via <code>Charset.defaultCharset().name()</code>.
-     */
-    public final static String DEFAULT_ENCODING = Charset.defaultCharset().name();
+     */        
+    public final static String DEFAULT_ENCODING = Charset.forName("UTF-8").name();            
 
     /*
      * The fields are marked as protected to let extending classes define

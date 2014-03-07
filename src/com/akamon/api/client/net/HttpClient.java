@@ -3,6 +3,7 @@ package com.akamon.api.client.net;
 import com.akamon.api.client.net.error.HttpRequestException;
 import com.akamon.api.client.net.error.InvalidHttpMethodException;
 import com.akamon.api.client.net.error.InvalidHttpUrlException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -11,26 +12,35 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.fluent.Request;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  * Class responsible for communicating (at low level) with the api rest server
- * @author Miguel Angel Garcia
  */
-public class HttpClient {
+public class HttpClient {    
+    private static final String SIGNATURE_CHARSET = "UTF-8";
+    
    private String appCode;
    private String appToken;
    private java.util.logging.Logger logger;
@@ -46,12 +56,7 @@ public class HttpClient {
        httpMethods.put("PUT", "PUT");
        httpMethods.put("DELETE", "DELETE");
    }     
-   
-   /**
-    * Builds the object
-    * @param appCode Public identifier
-    * @param appToken Secret token
-    */
+    
    public HttpClient(String appCode, String appToken, java.util.logging.Logger logger){
        this.appCode = appCode;
        this.appToken = appToken;   
@@ -61,16 +66,8 @@ public class HttpClient {
    public HttpClient(String appCode, String appToken) {
        this(appCode, appToken, null);
    }
-   
-   /**
-    * Performs and http call
-    * @param url Service url
-    * @param method Http method (POST, GET, PUT, DELETE)
-    * @param parameters Key-valued parameters for the request
-    * @return Response from server
-    * @throws HttpRequestException 
-    */ 
-   public HttpResponseData execute(String url, String method, NameValuePair[] parameters) throws HttpRequestException {      
+     
+   public HttpResponseData execute(String url, String method, NameValuePair[] parameters) throws HttpRequestException  {      
        
        if (!isValidHttpMethod(method)) {
            throw new InvalidHttpMethodException(method);
@@ -78,52 +75,42 @@ public class HttpClient {
        
        if (!isValidUrl(url)){
            throw new InvalidHttpUrlException(url);
-       }             
-              
-       Thread currentThread = Thread.currentThread();
-       String threadName = Thread.currentThread().getName();                        
-       String threadPoolName = currentThread.getThreadGroup().getName();     
+       }      
        
-       long requestId = RequestIdGenerator.createRequestIdGenerator().nextRequestId();         
+       CloseableHttpClient httpClient = null;     
+       String methodName = method.toString();                     
        
-       long startTime = System.currentTimeMillis();       
-       
+       long requestId = RequestIdGenerator.createRequestIdGenerator().nextRequestId();                
+       long startTime = System.currentTimeMillis();              
        Date requestInitDate = new Date();
        
-       String logPreffix = buildRequestLogIdentifier(requestId, threadName, threadPoolName);
+       String logPreffix = buildRequestLogIdentifier(requestId);
        
        StringBuilder logTextBuilder = new StringBuilder(logPreffix);
-       logTextBuilder.append(" request start");
-       
+       logTextBuilder.append(" request start");       
        log(logTextBuilder.toString());       
        
        try {                  
             method = method.toUpperCase();                           
             
             int ts = getUtcTimestamp(new Date());
-            String firma = calculateSign(parameters, ts);
+            String signature = calculateSignature(parameters, ts);
 
-            Request req = createHttpRequest(method, url);
-            req.addHeader("Accept", "application/json");
-            req.addHeader("X-Akamon-AppCode", appCode);
-            req.addHeader("X-Akamon-RequestId", Long.toString(requestId));
-            req.addHeader("X-Akamon-Ts", "" + ts);
-            req.addHeader("X-Akamon-Signature", firma);
+            HttpRequestBase request = createHttpRequest(methodName, url, parameters);
+            addHeadersToRequest(request, appCode, requestId, ts, signature);                        
 
-            if ( (method.equals("POST")) || (method.equals("PUT")) ){
-                 req.bodyForm(parameters);
-            }
+            httpClient = createHttpClient();                      
+            
+            HttpResponse response = httpClient.execute(request);                                    
+            int status_code = response.getStatusLine().getStatusCode();                         
 
-            HttpResponse httpRes = req.execute().returnResponse();
-            int status_code = httpRes.getStatusLine().getStatusCode();      
-
-            HttpEntity entity = httpRes.getEntity();
-            InputStream is = entity.getContent();
-            String body = IOUtils.toString(is, "UTF-8");
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();            
+            String body = IOUtils.toString(is, SIGNATURE_CHARSET);
             
             log(logPreffix + 
                     "requestId: " + requestId + "\n" + 
-                    "firma: " + firma + "\n" + 
+                    "firma: " + signature + "\n" + 
                     "parameters: " + requestParametersToString(parameters) + "\n" +                    
                     "timestamp: " + ts + "\n" +  
                     body);
@@ -140,8 +127,20 @@ public class HttpClient {
            
            logTextBuilder.delete(0, logTextBuilder.length());
            logTextBuilder.append(logPreffix).append(" end request started at ").append(dateFormat.format(requestInitDate)).append(" elapsed milliseconds ").append(elapsedTime);
-           log(logTextBuilder.toString());           
+           log(logTextBuilder.toString());  
+           
+           if (httpClient != null){                     
+               try {
+                   httpClient.close();
+               } catch (IOException ex) {                   
+                   log("Problem closing http client (IOException): " + ex.getMessage(), Level.SEVERE);
+               }
+           }
        }    
+   }
+   
+   private CloseableHttpClient createHttpClient(){
+       return HttpClientBuilder.create().build();       
    }
    
    private void logRequestInfoOnError(String logPreffix, Exception e, String url, String method, NameValuePair[] parameters){
@@ -160,8 +159,13 @@ public class HttpClient {
        log(logTextBuilder.toString(), Level.SEVERE);                      
    }   
    
-   private String buildRequestLogIdentifier(long requestId, String threadName, String threadPoolName)
+   private String buildRequestLogIdentifier(long requestId)
    {
+              
+       Thread currentThread = Thread.currentThread();
+       String threadName = Thread.currentThread().getName();                        
+       String threadPoolName = currentThread.getThreadGroup().getName();     
+       
        StringBuilder builder = new StringBuilder();
        builder.append("reqId: ").append(requestId).append(" ").append(threadName).append(".").append(threadPoolName).append(" ");      
        
@@ -180,21 +184,11 @@ public class HttpClient {
        
        return stringified.toString();
    }
-   
-   /**
-    * Returns true if the http method is valid
-    * @param method (POST, GET, PUT, DELETE)
-    * @return true if the method is valid
-    */
+      
    private boolean isValidHttpMethod(String method){
        return ((method != null) &&  (httpMethods.containsKey(method.toUpperCase())));
    }
-   
-   /**
-    * Returns true if the url method is valid
-    * @param url The url to validate
-    * @return true if the url is valid
-    */
+     
    private boolean isValidUrl(String url){
        url = url == null ? "" : url.toLowerCase();
        
@@ -213,38 +207,46 @@ public class HttpClient {
        
        return true;
    }
-   
-   /**
-    * Creates a request object
-    * @param method Http method 
-    * @param url Url to call
-    * @return Request obtained from the server
-    */
-   private Request createHttpRequest(String method, String url){
-       Request req = null;
-       method = method.toUpperCase();
-       if(method.equals("GET"))
-    	   req = Request.Get(url);
-       else if(method.equals("POST"))
-    	   req = Request.Post(url);
-       else if(method.equals("PUT"))
-    	   req = Request.Put(url);
-       else if(method.equals("DELETE"))
-    	   req = Request.Delete(url);
-      
-       return req;
+         
+   private HttpRequestBase createHttpRequest(String methodName, String url, NameValuePair[] parameters) throws UnsupportedEncodingException{              
+       HttpRequestBase request = null;       
+       
+       if(methodName.equals("GET")){
+    	   request = new HttpGet(url);
+       }
+       else if (methodName.equals("POST")){
+    	   request = new HttpPost(url);
+           addParametersToRequest(request, parameters);
+       }
+       else if(methodName.equals("PUT")){
+    	   request = new HttpPut(url);
+           addParametersToRequest(request, parameters);
+       }
+       else if(methodName.equals("DELETE")){
+    	   request = new HttpDelete(url);           
+       }              
+       
+       return request;              
    }
    
-   /**
-    * Calculates the right sign for the operation
-    * @param params Request parameters
-    * @param ts Timestamp for the request
-    * @return Sign String with the rigt signatuire to send with the request
-    * @throws UnsupportedEncodingException
-    * @throws NoSuchAlgorithmException
-    * @throws InvalidKeyException 
-    */
-   private String calculateSign(NameValuePair[] params, int ts) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException{
+   private void addParametersToRequest(HttpRequestBase request, NameValuePair[] parameters) throws UnsupportedEncodingException{
+       
+       List<NameValuePair> parametersList = new ArrayList<NameValuePair>(Arrays.asList(parameters));
+       UrlEncodedFormEntity encodedUrl = new UrlEncodedFormEntity(parametersList, SIGNATURE_CHARSET);
+       
+       HttpEntityEnclosingRequestBase enclosingRequest = (HttpEntityEnclosingRequestBase) request;
+       enclosingRequest.setEntity(encodedUrl);
+   } 
+   
+   private void addHeadersToRequest(HttpRequestBase request, String appCode, long requestId, int ts, String signature) {
+       request.addHeader("Accept", "application/json");
+       request.addHeader("X-Akamon-AppCode", appCode);
+       request.addHeader("X-Akamon-RequestId", Long.toString(requestId));
+       request.addHeader("X-Akamon-Ts", "" + ts);
+       request.addHeader("X-Akamon-Signature", signature);
+   }               
+      
+   private String calculateSignature(NameValuePair[] params, int ts) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         Arrays.sort(params, new Comparator(){
             @Override
             public int compare(Object t1, Object t2) {                                
@@ -258,7 +260,7 @@ public class HttpClient {
             queryStringBuilder.addQueryParameter(p);
         }
         
-        String query = queryStringBuilder.encode("UTF-8");
+        String query = queryStringBuilder.encode(SIGNATURE_CHARSET);
         
         if (query == null ){
             query = "";
@@ -275,12 +277,7 @@ public class HttpClient {
         
         return signer.generateSignature(dataToBeSigned.toString());                              
     }            
-   
-   /**
-    * Gets the unix timestamp, int the GMT timezone, for the given date
-    * @param date
-    * @return Timestamp in UNIX format (seconds from 1970-01-01 to date)
-    */
+     
    private int getUtcTimestamp(Date date){
         Calendar c = Calendar.getInstance();
         
