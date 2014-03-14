@@ -23,9 +23,7 @@ public class SerializerHelper {
             
             boolean customSerialization = false;
             
-            if ( (data instanceof Object[]) || (data instanceof java.util.HashMap) || (data instanceof java.util.Date)) {
-                customSerialization = true;                
-            }
+            customSerialization = dataNeedsCustomSerialization(data);
                         
             if ((customSerialization) && (data instanceof java.util.Date)) {
                 serialized = df.format((java.util.Date) data);
@@ -41,4 +39,8 @@ public class SerializerHelper {
         
         return serialized;
     }
+
+	private boolean dataNeedsCustomSerialization(Object data) {
+		return (data instanceof Object[]) || (data instanceof java.util.List) || (data instanceof java.util.HashMap) || (data instanceof java.util.Date);
+	}
 }
