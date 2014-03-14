@@ -5,34 +5,34 @@ package com.akamon.api.client.proxy.game;
 * @package Akamon\API\Client\Proxy\Game
 */
 public class GameLevelResponseData {
-
-    /**
+	
+	/**
 	* @var int
 	*/
 	private Integer level;
-
+	
 	/**
 	* @var int
 	*/
-    private Integer points;
-
+	private Integer points;
+	
 	/**
 	* @var int
 	*/
-    private Integer limbo;
-
-	    /**
+	private Integer limbo;
+	
+	/**
 	* @param int $level
 	* @param int $points
 	* @param int $limbo
 	*/
 	public GameLevelResponseData(Integer level, Integer points, Integer limbo)
 	{
-	    this.level = level;
-	    this.points = points;
-	    this.limbo = limbo;
+		this.level = level;
+		this.points = points;
+		this.limbo = limbo;
 	}
-
+	
 	/**
 	 * @return Integer
 	 */
@@ -40,7 +40,7 @@ public class GameLevelResponseData {
 	{
 		return this.level;
 	}
-
+	
 	/**
 	 * @return Integer
 	 */
@@ -48,13 +48,13 @@ public class GameLevelResponseData {
 	{
 		return this.points;
 	}
-
+	
 	/**
 	* @return bool
 	*/
-    public boolean isLimbo()
-    {
-        return this.limbo == 1;
-    }
-	
+	public boolean isLimbo()
+	{
+		return this.limbo == 1;
+	}
+
 }

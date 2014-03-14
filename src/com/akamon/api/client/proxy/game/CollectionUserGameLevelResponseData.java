@@ -25,7 +25,7 @@ public class CollectionUserGameLevelResponseData
 	*/
 	public Set<String> getSuccessfulUsersPublicIds()
 	{
-	    return success.keySet();
+		return success.keySet();
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class CollectionUserGameLevelResponseData
 	*/
 	public Set<String> getErrorUsersPublicIds()
 	{
-	    return errors.keySet();
+		 return errors.keySet();
 	}
 	
 
@@ -46,12 +46,12 @@ public class CollectionUserGameLevelResponseData
 	{
 		UserGameLevelResponseData userGameLevel = null;
 	
-	    if (success.containsKey(publicUserId)) 
-	    {
-	        userGameLevel = success.get(publicUserId);
-	    }
+		if (success.containsKey(publicUserId)) 
+		{
+			userGameLevel = success.get(publicUserId);
+		}
 	
-	    return userGameLevel;
+		return userGameLevel;
 	}
 	
 	/**
@@ -59,16 +59,16 @@ public class CollectionUserGameLevelResponseData
 	*
 	* @return null|UserGameLevelError
 	*/
-    public UserGameLevelError getErrorForUser(String publicUserId)
-    {
-    	UserGameLevelError error = null;
-
-        if (errors.containsKey(publicUserId)) 
-        {
-            error = errors.get(publicUserId);
-        }
-
-        return error;
-    }
+	public UserGameLevelError getErrorForUser(String publicUserId)
+	{
+		UserGameLevelError error = null;
+		
+		if (errors.containsKey(publicUserId)) 
+		{
+			error = errors.get(publicUserId);
+		}
+		
+		return error;
+	}
 }
 
