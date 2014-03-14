@@ -1,6 +1,5 @@
 package com.akamon.api.client.proxy.game;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
