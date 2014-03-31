@@ -41,7 +41,6 @@ public class UserGameLevelResponseData
 	public UserGameLevelResponseData(Integer level, Integer points, Integer loops)
 	{
 		this.level  = level;
-		this.level  = level;
 		this.points = points;
 		this.loops  = loops;
 	}
