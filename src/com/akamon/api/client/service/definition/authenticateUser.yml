@@ -1,0 +1,12 @@
+authenticateUser: 
+  method: POST
+  format: application/json
+  url: /users/authenticate/{userName}  
+  params:
+    userName:
+      type: string
+      required: true
+    password:
+      type: string
+      required: true
+      regexp: ['/^[a-zA-Z0-9]{6,15}$/']

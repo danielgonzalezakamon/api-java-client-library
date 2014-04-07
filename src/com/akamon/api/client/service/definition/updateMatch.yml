@@ -1,0 +1,14 @@
+updateMatch:  
+  method: PUT
+  format: application/json
+  url: /games/{game_id}/match/{match_id}  
+  params:
+    game_id:
+      type: integer
+      required: true
+    match_id:
+      type: integer
+      required: true
+    state:
+      type: string
+      regexp: ['/^initiated$|^finished$|^INITIATED$|^FINISHED$/']

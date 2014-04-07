@@ -1,0 +1,10 @@
+userSessionGetContent:
+  service: userSessionGetContent 
+  method: GET
+  url: /users/session/{session_id}
+  format: application/json  
+  params:    
+    session_id:
+      type: string
+      required: true
+

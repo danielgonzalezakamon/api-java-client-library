@@ -1,0 +1,11 @@
+levelForUserInGame:  
+  method: GET
+  url: /game/{gameId}/user/{publicUserId}/level
+  format: application/json  
+  params:
+    gameId:
+      type: string
+      required: true
+    publicUserId:
+      type: string
+      required: true

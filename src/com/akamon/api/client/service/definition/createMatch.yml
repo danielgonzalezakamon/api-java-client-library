@@ -1,0 +1,11 @@
+createMatch: 
+  method: POST
+  format: application/json
+  url: /games/{game_id}/match  
+  params:
+    game_id:
+      type: integer
+      required: true
+    users:
+      type: array
+      required: true

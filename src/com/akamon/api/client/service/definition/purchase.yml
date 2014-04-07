@@ -1,0 +1,14 @@
+purchase:  
+  method: POST
+  format: application/json  
+  url: /Payments/Purchase/{provider}
+  params:
+    provider:
+      type: string
+      required: true
+    method:
+      type: string
+      required: false
+    additionalParams:
+      type: array
+      required: true

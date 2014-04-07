@@ -1,0 +1,11 @@
+awakeUsers:
+  service: awakeUsers  
+  method: GET
+  format: application/json 
+  url: /awake/user/{publicUserId}/game/{gameId}
+  params:
+    publicUserId:
+      type: string
+      required: true
+    gameId:
+      type: integer

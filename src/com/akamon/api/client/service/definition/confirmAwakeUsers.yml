@@ -1,0 +1,15 @@
+confirmAwakeUsers:
+  service: confirmAwakeUsers  
+  method: GET
+  format: application/json  
+  url: /awake/user/{publicUserId}/confirm/{token}/context/{contextId}
+  params:
+    publicUserId:
+      type: string
+      required: true
+    token:
+      type: string
+      required: true
+    contextId:
+      type: integer
+      required: true

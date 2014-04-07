@@ -1,0 +1,17 @@
+purchaseComplete:  
+  method: POST
+  format: application/json  
+  url: /Payments/PurchaseComplete/{provider}/{method}
+  params:
+    order_id:
+      type: integer
+      required: true
+    provider:
+      type: string
+      required: true
+    method:
+      type: string
+      required: true
+    error:
+      type: integer
+      required: true

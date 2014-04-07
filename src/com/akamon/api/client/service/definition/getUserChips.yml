@@ -1,0 +1,8 @@
+getUserChips:  
+  method: GET
+  format: application/json
+  url: /users/{public_user_id}/chips  
+  params:
+    public_user_id:
+      type: string
+      required: true

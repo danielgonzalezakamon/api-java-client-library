@@ -1,0 +1,9 @@
+createUserSession:
+  service: createUserSession  
+  method: POST
+  url: /users/session
+  format: application/json  
+  params:    
+    userName:
+      type: string
+      required: true

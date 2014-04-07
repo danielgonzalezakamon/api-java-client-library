@@ -1,0 +1,14 @@
+singleSignOn:  
+  method: POST
+  format: application/json
+  url: /sso  
+  params:
+    provider:
+      type: string
+      required: true
+    user:
+      type: string
+      required: true
+    additionalParams:
+      type: array
+      required: false

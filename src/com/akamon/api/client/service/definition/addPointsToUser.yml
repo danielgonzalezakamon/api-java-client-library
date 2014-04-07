@@ -1,0 +1,14 @@
+addPointsToUser:  
+  method: POST
+  url: /game/{gameId}/user/{publicUserId}/points/{points}
+  format: application/json  
+  params:
+    gameId:
+      type: string
+      required: true
+    publicUserId:
+      type: string
+      required: true
+    points:
+      type: integer
+      required: true

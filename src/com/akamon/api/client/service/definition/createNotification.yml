@@ -1,0 +1,25 @@
+createNotification:
+  service: createNotification  
+  method: POST
+  url: /notification
+  format: application/json  
+  params:
+    publicUserId:
+      type: string
+      required: true
+    generatedBy:
+      type: string
+      required: true
+      regexp: ['/^(game|user|web|GAME|USER|WEB)$/']
+    generatedByIdentifier:
+      type: integer
+      required: false
+    format:
+      type: string
+      required: true
+    eventType:
+      type: string
+      required: true
+    content:
+      type: string
+      required: true

@@ -1,0 +1,32 @@
+getBonus: 
+  method: POST
+  format: application/json
+  url: /bonus/user/{user_id}  
+  params:
+    user_id:
+      type: integer
+      required: true
+    bonus:
+      type: string
+      required: true
+    computer_id:
+      type: integer
+      required: true
+    ip:
+      type: string
+      required: false
+    country:
+      type: string
+      required: true
+    canal_id:
+      type: integer
+      required: false
+    game_id:
+      type: integer
+      required: false
+    user_type:
+      type: integer
+      required: false
+    debug:
+      type: integer
+      required: false
