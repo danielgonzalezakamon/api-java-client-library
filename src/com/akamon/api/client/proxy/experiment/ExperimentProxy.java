@@ -17,19 +17,14 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
  */
 public class ExperimentProxy extends BaseServiceProxy
 {
-	/**
-	 * Constructor
-	 * @param paramAuthData
-         * @param logger
-	 */
-	public ExperimentProxy(AuthData paramAuthData, java.util.logging.Logger logger)
+        public ExperimentProxy(String serviceUrlProtocolAndDomain, AuthData paramAuthData, java.util.logging.Logger logger)
 	{
-            super(paramAuthData, logger);
+            super(serviceUrlProtocolAndDomain, paramAuthData, logger);
 	}
         
-        public ExperimentProxy(AuthData paramAuthData)
+        public ExperimentProxy(String serviceUrlProtocolAndDomain, AuthData paramAuthData)
 	{
-            super(paramAuthData, null);
+            this(serviceUrlProtocolAndDomain, paramAuthData, null);
 	}
 
 	/**

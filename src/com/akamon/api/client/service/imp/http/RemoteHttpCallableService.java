@@ -1,6 +1,5 @@
 package com.akamon.api.client.service.imp.http;
 
-import com.akamon.api.client.error.ServiceInvocationException;
 import com.akamon.api.client.net.HttpClient;
 import com.akamon.api.client.net.HttpResponseData;
 import com.akamon.api.client.security.AuthData;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.NameValuePair;
@@ -32,7 +30,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-
+   
     private String serviceCode;
     
     private AuthData authData;
@@ -47,14 +45,8 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
     
     private final static Pattern paramUrlPattern = Pattern.compile("\\{[a-zA-Z0-9_\\-]+\\}");        
     
-    
-    /**
-     * Builds the object
-     * @param serviceCode Operation service code
-     * @param authData Authentication data object
-     * @throws ServiceDefinitionException 
-     */
-    public RemoteHttpCallableService(String serviceCode, AuthData authData, java.util.logging.Logger logger) throws ServiceDefinitionException {
+        
+    public RemoteHttpCallableService(String urlProtocolAndDomain, String serviceCode, AuthData authData, java.util.logging.Logger logger) throws ServiceDefinitionException {       
         this.logger = logger;
         
         setServiceCode(serviceCode);
@@ -69,13 +61,16 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
             throw new ServiceDefinitionException(serviceCode);
         }
         else {
-            setUrl(serviceUrl.toString());
+            StringBuilder finalUrl = new StringBuilder(urlProtocolAndDomain);
+            finalUrl.append(serviceUrl.toString());
+            
+            setUrl(finalUrl.toString());
             setHttpMethod(serviceMethod.toString());
         }        
     }
     
-    public RemoteHttpCallableService(String serviceCode, AuthData authData) throws ServiceDefinitionException {
-        this(serviceCode, authData, null);
+    public RemoteHttpCallableService(String urlProtocolAndDomain, String serviceCode, AuthData authData) throws ServiceDefinitionException {
+        this(urlProtocolAndDomain, serviceCode, authData, null);
     }
     
     /**

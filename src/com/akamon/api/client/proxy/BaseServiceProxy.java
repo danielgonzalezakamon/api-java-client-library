@@ -18,21 +18,25 @@ import java.util.LinkedHashMap;
  */
 public abstract class BaseServiceProxy  {
     
+    private String serviceUrlProtocolAndDomain = null;
+    
     private AuthData authData = null;
     
     private ICallableServiceFactory serviceFactory = null;
             
-    protected BaseServiceProxy(AuthData authData, java.util.logging.Logger logger){
+    protected BaseServiceProxy(String serviceUrlProtocolAndDomain, AuthData authData, java.util.logging.Logger logger){
+        this.serviceUrlProtocolAndDomain = serviceUrlProtocolAndDomain;
         this.authData = authData;
         
         HashMap<String,Object> factoryOptions = new LinkedHashMap();
         factoryOptions.put(CallableServiceFactory.AUTH_DATA_KEY, this.authData);
+        factoryOptions.put(CallableServiceFactory.URL_PROTOCOL_AND_DOMAIN, this.serviceUrlProtocolAndDomain);
         
         serviceFactory = new CallableServiceFactory(factoryOptions, logger);        
     }
     
-    protected BaseServiceProxy(AuthData authData){
-        this(authData, null);
+    protected BaseServiceProxy(String serviceUrlProtocolAndDomain, AuthData authData){
+        this(serviceUrlProtocolAndDomain, authData, null);
     }        
     
     /**

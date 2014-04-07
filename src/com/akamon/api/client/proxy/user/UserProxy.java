@@ -15,12 +15,12 @@ import java.util.HashMap;
  */
 public class UserProxy extends BaseServiceProxy { 
                     
-    public UserProxy(AuthData authData, java.util.logging.Logger logger){
-        super(authData, logger);
+    public UserProxy(String serviceUrlProtocolAndDomain, AuthData authData, java.util.logging.Logger logger){
+        super(serviceUrlProtocolAndDomain, authData, logger);
     }
     
-    public UserProxy(AuthData authData){
-        this(authData, null);
+    public UserProxy(String serviceUrlProtocolAndDomain, AuthData authData){
+        this(serviceUrlProtocolAndDomain, authData, null);
     }
     
     /**

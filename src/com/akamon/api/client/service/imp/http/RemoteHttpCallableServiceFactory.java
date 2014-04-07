@@ -11,20 +11,18 @@ import com.akamon.api.client.service.error.ServiceDefinitionException;
  */
 public class RemoteHttpCallableServiceFactory implements ICallableServiceFactory {
     
+    private String urlProtocolAndDomain;
     private AuthData authData;
     private java.util.logging.Logger logger;
-    
-    /**
-     * Builds the factory
-     * @param authData Authentication data object
-     */
-    public RemoteHttpCallableServiceFactory(AuthData authData, java.util.logging.Logger logger){
+        
+    public RemoteHttpCallableServiceFactory(String urlProtocolAndDomain, AuthData authData, java.util.logging.Logger logger){
+        this.urlProtocolAndDomain = urlProtocolAndDomain;
         this.authData = authData;
         this.logger = logger;
-    }
+    }    
     
-    public RemoteHttpCallableServiceFactory(AuthData authData){
-        this(authData, null);
+    public RemoteHttpCallableServiceFactory(String urlProtocolAndDomain, AuthData authData){
+        this(urlProtocolAndDomain, authData, null);
     }            
 
     /**
@@ -35,7 +33,7 @@ public class RemoteHttpCallableServiceFactory implements ICallableServiceFactory
      */
     @Override
     public ICallableService loadCallableService(String serviceCode) throws ServiceDefinitionException {        
-        return new RemoteHttpCallableService(serviceCode, this.authData, this.logger);        
+        return new RemoteHttpCallableService(urlProtocolAndDomain, serviceCode, this.authData, this.logger);        
     }
     
 }

@@ -13,8 +13,8 @@ import java.util.HashMap;
 public class CallableServiceFactory implements ICallableServiceFactory {
     
     public static final String AUTH_DATA_KEY = "AUTH_DATA";
-    
-    private AuthData authData = null;
+    public static final String URL_PROTOCOL_AND_DOMAIN = "URL_PROTOCOL_AND_DOMAIN";
+        
     
     private RemoteHttpCallableServiceFactory httpFactory = null;    
 
@@ -22,17 +22,19 @@ public class CallableServiceFactory implements ICallableServiceFactory {
      * Creates thefactory
      * @param options If a key "AUTH_DATA" exists, it's used for the authentication
      */
-    public CallableServiceFactory(HashMap<String,Object> options, java.util.logging.Logger logger){        
+    public CallableServiceFactory(HashMap<String,Object> options, java.util.logging.Logger logger){  
         
-        if ( (options != null) && (options.containsKey(AUTH_DATA_KEY)) ){
-           Object oAuthData =  options.get(AUTH_DATA_KEY);
-           
-           if ( (oAuthData != null) && (oAuthData instanceof AuthData) ){
-               this.authData = (AuthData) oAuthData;
-           }
-        }
+        AuthData authData = null;
+        String urlProtocolAndDomain = null;
         
-        httpFactory = new RemoteHttpCallableServiceFactory(this.authData, logger);
+        boolean customizedOptions = (options != null);
+        
+        if (customizedOptions){
+            authData = loadAuthData(options);
+            urlProtocolAndDomain = loadUrlProtocolAndDomain(options);
+        }                
+        
+        httpFactory = new RemoteHttpCallableServiceFactory(urlProtocolAndDomain, authData, logger);
     }      
     
     public CallableServiceFactory(HashMap<String,Object> options){
@@ -49,5 +51,39 @@ public class CallableServiceFactory implements ICallableServiceFactory {
     public ICallableService loadCallableService(String serviceCode) throws ServiceDefinitionException {         
         return httpFactory.loadCallableService(serviceCode);
     }        
+    
+    private AuthData loadAuthData(HashMap<String,Object> options){
+        
+        AuthData authData = null;
+        boolean authDataObjectIsPresent = options.containsKey(AUTH_DATA_KEY);
+        
+        if (!authDataObjectIsPresent) return null;
+                
+        Object oAuthData =  options.get(AUTH_DATA_KEY);
+        boolean authDataObjectIsValid = ( (oAuthData != null) && (oAuthData instanceof AuthData) );
+           
+        if (authDataObjectIsValid) {
+            authData = (AuthData) oAuthData;
+        }
+        
+        return authData;
+    }   
+    
+    private String loadUrlProtocolAndDomain(HashMap<String,Object> options) {
+        
+        String urlProtocolAndDomain = null;
+        
+        boolean urlProtocolAndDomainIsPresent = options.containsKey(URL_PROTOCOL_AND_DOMAIN);
+        if (!urlProtocolAndDomainIsPresent) return null;
+        
+        Object oUrlProtocolAndDomain = options.get(URL_PROTOCOL_AND_DOMAIN);
+        boolean oUrlProtocolAndDomainIsValid = ((oUrlProtocolAndDomain != null) && (oUrlProtocolAndDomain instanceof String));
+        
+        if (oUrlProtocolAndDomainIsValid){
+            urlProtocolAndDomain = (String) oUrlProtocolAndDomain;
+        }        
+        
+        return urlProtocolAndDomain;
+    }
     
 }

@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 
 public class AwakeUserProxy extends BaseServiceProxy {
     
-    public AwakeUserProxy(AuthData authData, Logger logger) {
-        super(authData, logger);
+    public AwakeUserProxy(String serviceUrlProtocolAndDomain, AuthData authData, Logger logger) {
+        super(serviceUrlProtocolAndDomain, authData, logger);
     }
     
-    public AwakeUserProxy(AuthData authData){
-        this(authData, null);
+    public AwakeUserProxy(String serviceUrlProtocolAndDomain, AuthData authData){
+        this(serviceUrlProtocolAndDomain, authData, null);
     }
     
     public AwakeUsersResponseData awakeUsers(String publicUserId, int gameId) throws ServiceInvocationException {       

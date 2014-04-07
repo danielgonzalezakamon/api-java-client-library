@@ -18,7 +18,8 @@ public class AwakeUserTest extends BaseTest {
         System.out.println("testAwakeUsers");
         
         String errorMessage = ""; 
-        AwakeUserProxy proxy = new AwakeUserProxy (createAuthObject());
+        String protocolUrlAndDomain = getDefaultTestServiceUrlProtocolAndDomain();        
+        AwakeUserProxy proxy = new AwakeUserProxy (protocolUrlAndDomain, createAuthObject());
         
         Exception error = null;
         
@@ -43,7 +44,8 @@ public class AwakeUserTest extends BaseTest {
     {
         System.out.println("testConfirmAwakeUser");
         
-        AwakeUserProxy proxy = new AwakeUserProxy (createAuthObject());         
+        String protocolUrlAndDomain = getDefaultTestServiceUrlProtocolAndDomain();  
+        AwakeUserProxy proxy = new AwakeUserProxy (protocolUrlAndDomain, createAuthObject());         
         proxy.confirmAwakeUser("d3d1688b90da4fd93f39a0895fc30c4b", "token", 10);        
     }
 }

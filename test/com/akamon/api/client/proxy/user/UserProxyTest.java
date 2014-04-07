@@ -27,7 +27,8 @@ public class UserProxyTest extends BaseTest {
         
         Logger logger = Logger.getLogger(this.getClass().getName());
         
-        UserProxy proxy = new UserProxy (createAuthObject(), logger);
+        String protocolUrlAndDomain = getDefaultTestServiceUrlProtocolAndDomain();  
+        UserProxy proxy = new UserProxy (protocolUrlAndDomain, createAuthObject(), logger);
         UserSessionResponseData session = proxy.createUserSession ("carles");
         
         assertNotNull("No session object obtained from server", session);
@@ -48,7 +49,9 @@ public class UserProxyTest extends BaseTest {
     public void testUserSessionGetContent() throws Exception {
         
         System.out.println("userSessionGetContent");
-        UserProxy proxy = new UserProxy (createAuthObject());
+        
+        String protocolUrlAndDomain = getDefaultTestServiceUrlProtocolAndDomain();  
+        UserProxy proxy = new UserProxy (protocolUrlAndDomain, createAuthObject());
         UserSessionResponseData session = proxy.createUserSession ("carles");
         
         UserResponseData userData = proxy.userSessionGetContent(session.getSession_id());

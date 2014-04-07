@@ -26,6 +26,11 @@ public class BaseTest {
         return new AuthData("app1","7535866746d65a7eef0241caa8163fe7","sha256");
     }
     
+    protected String getDefaultTestServiceUrlProtocolAndDomain()
+    {
+        return "http://dev-api.mundijuegos.servidor/app_dev.php";
+    }
+    
    @Test
     public void testOK() {
         assertTrue (true);
