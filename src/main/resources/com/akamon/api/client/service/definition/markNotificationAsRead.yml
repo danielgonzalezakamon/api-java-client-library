@@ -1,0 +1,11 @@
+markNotificationAsRead:    
+  method: POST
+  url: /notification/{notificationId}/user/{publicUserId}
+  format: application/json  
+  params:
+    notificationId:
+      type: integer
+      required: true
+    publicUserId:
+      type: string
+      required: true

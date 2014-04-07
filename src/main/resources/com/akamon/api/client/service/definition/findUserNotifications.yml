@@ -1,0 +1,8 @@
+findUserNotifications: 
+  method: GET
+  format: findUserNotifications/json
+  url: /notification/user/{publicUserId}  
+  params:
+    publicUserId:
+      type: string
+      required: true
