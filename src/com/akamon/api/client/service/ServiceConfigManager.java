@@ -3,8 +3,7 @@ package com.akamon.api.client.service;
 import com.akamon.api.client.service.error.InvalidServiceDefinitionFileException;
 import com.akamon.api.client.service.error.ServiceDefinitionException;
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
@@ -15,7 +14,7 @@ import org.yaml.snakeyaml.Yaml;
  * @author Miguel Angel Garcia
  */
 public class ServiceConfigManager {            
-    private static String configDir = null;
+  
     private static HashMap<String,ServiceConfigManager> configManagers;
     
     static {
@@ -63,23 +62,7 @@ public class ServiceConfigManager {
         } 
         
         return manager;
-    }
-    
-    /**
-     * Gets the conf directory (where are the config data files)
-     * @return conf directory 
-     */
-    public static String getConfigDir(){
-        return configDir;
-    }
-    
-    /**
-     * Sets the conf directory (where are the config data files)
-     * @param configDir conf directory
-     */
-    public static void registerConfigDir(String configDir){
-        ServiceConfigManager.configDir = configDir;
-    }        
+    }                      
     
     /**
      * <<Singleton>> Loads a new instance of the class
@@ -92,32 +75,30 @@ public class ServiceConfigManager {
         ServiceConfigManager manager = ServiceConfigManager.getServiceConfigurationManager(serviceCode);                
         
         if (manager == null){
-            manager = new ServiceConfigManager(serviceCode, ServiceConfigManager.getConfigDir());
+            manager = new ServiceConfigManager(serviceCode);
             ServiceConfigManager.addServiceConfigurationManager(manager);
         }        
         
         return manager;                
     }     
-    
-    private String dir = null;
+        
     private String serviceCode = null;
-    private Map<String, Object> fileContent = null;
+    private Map<String, Object> serviceDefinitionContent = null;
     
     /**
      * Builds the object
-     * @param serviceCode Operation service code
-     * @param dir Directory where the config files are
+     * @param serviceCode Operation service code     
      * @throws ServiceDefinitionException 
      */
-    private ServiceConfigManager(String serviceCode, String dir) throws ServiceDefinitionException {
+    private ServiceConfigManager(String serviceCode) throws ServiceDefinitionException {
         this.serviceCode = serviceCode;
-        this.dir = dir;
+       
         Map<String, Object> content = null;
                
         content = loadYmlConfigFile(this.serviceCode);
                         
         if (content.containsKey(this.serviceCode)){            
-            fileContent = (java.util.HashMap) content.get(this.serviceCode);
+            serviceDefinitionContent = (java.util.HashMap) content.get(this.serviceCode);
         }        
         else {
             // Invalid Yml... throw exception
@@ -129,14 +110,7 @@ public class ServiceConfigManager {
             throw new ServiceDefinitionException(serviceCode);
         }
         
-    }
-
-    /**
-     * @return the dir
-     */
-    public String getDir() {
-        return dir;
-    }
+    }    
 
     /**
      * @return the serviceCode
@@ -152,14 +126,18 @@ public class ServiceConfigManager {
      * @throws ServiceDefinitionException 
      */
     private Map<String, Object> loadYmlConfigFile(String serviceCode) throws ServiceDefinitionException {
-        String fichero = "";
+        String resourceName = "";
         try {
-            fichero = builRouteToConfigFile(serviceCode);
+            resourceName = builResourceRouteToConfigFile(serviceCode);
+            InputStream serviceDefintionStream = this.getClass().getResourceAsStream(resourceName);
+            
+            if (serviceDefintionStream == null) throw new NullPointerException();
+                        
             Yaml yaml = new Yaml();
-            return (Map<String, Object>) yaml.load(new BufferedInputStream(new FileInputStream(fichero)));
+            return (Map<String, Object>) yaml.load(new BufferedInputStream(serviceDefintionStream));
         }
-        catch (FileNotFoundException fnfe){
-            throw new InvalidServiceDefinitionFileException(serviceCode, fichero);
+        catch (NullPointerException npe){
+            throw new InvalidServiceDefinitionFileException(serviceCode, resourceName);
         }
         catch (Exception e){
             throw new ServiceDefinitionException(serviceCode, e);            
@@ -171,8 +149,13 @@ public class ServiceConfigManager {
      * @param serviceCode
      * @return Generates the expected route to load the service config data
      */
-    private String builRouteToConfigFile(String serviceCode){
-        return this.dir + java.io.File.separator + serviceCode + ".yml";
+    private String builResourceRouteToConfigFile(String serviceCode){
+        StringBuilder resourceRouteBuilder = new StringBuilder("definition/");
+        resourceRouteBuilder.append(serviceCode).append(".yml");
+        
+        String resourceRoute = resourceRouteBuilder.toString();
+               
+        return resourceRoute;
     }
     
     /**
@@ -183,8 +166,8 @@ public class ServiceConfigManager {
     public Object getConfigParameter(String key) {
         Object param = null;
         
-        if (fileContent.containsKey(key)){            
-            return fileContent.get(key);
+        if (serviceDefinitionContent.containsKey(key)){            
+            return serviceDefinitionContent.get(key);
         }           
         
         return param;

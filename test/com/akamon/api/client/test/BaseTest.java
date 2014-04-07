@@ -15,12 +15,7 @@ import static org.junit.Assert.*;
  */
 public class BaseTest {
     
-    private static DatabaseManager databaseManager = null;
-                    
-    public BaseTest ()
-    {         
-         ServiceConfigManager.registerConfigDir("service_definitions");
-    }
+    private static DatabaseManager databaseManager = null;                        
     
     /**
      * Creates an auth object required to connect with the api server
