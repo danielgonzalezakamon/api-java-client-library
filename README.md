@@ -25,15 +25,9 @@ The base jar provides you the core funcionaly, and the proxy jar the final class
 are going to use directly in your application.
 
 The proxy library read it's configuration from some yaml files located in the
-"service configuration directory". You can find the yml files in the "service_definitions"
-project directory. Please modify with the final server & environment url you are going to use
-(for example: http://test-api.akamon.com ).
+package com.akamon.api.client.service.definition. Please look at the existents
+files when the addition of new services were needed.
 
-So, before you can use the library, you *MUST* initialize it :
-
-```
-ServiceConfigManager.registerConfigDir("C:/..../service_definitions"); 
-```
 
 Another important issue is about the authentication. With every Proxy object,
 you have to provide the authentication data in an AuthData object.
@@ -48,16 +42,16 @@ Below you can find a complete code example :
    
 ```
 
-// Initilization only when the program starts     
-ServiceConfigManager.registerConfigDir("C:/api-java-client-library/service_definitions");
-
-TestsProxy p = new TestsProxy(new AuthData("app_code","app_token","sha256"));
+TestsProxy p = new TestsProxy("http://api.akamon.com", new AuthData("app_code","app_token","sha256"));
         
 SayHelloResponseData res = p.sayHello("Peter");
         
 System.out.println("Greeting received: " + res.getGreeting());
 
 ```
+
+Please replace "http://api.akamon.com" with the right protocol and server domain
+for the environment you are using (development, integratio, etc).
 
 # Async usage
 
