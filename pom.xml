@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.akamon</groupId>
 	<artifactId>akamon-api-client</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<name>${project.artifactId}::${project.version} Akamon API Java Client</name>
 
 	<dependencies>
@@ -85,7 +85,7 @@
     <distributionManagement>
         <repository>
             <id>AkaArtifactory</id>
-            <url>http://artifactory.devel.akamon.com:8081/artifactory/repo/</url>
+            <url>http://artifactory.devel.akamon.com:8081/artifactory/libs-release-local</url>
         </repository>
     </distributionManagement>
 

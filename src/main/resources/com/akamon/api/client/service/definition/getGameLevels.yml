@@ -1,5 +1,5 @@
 getGameLevels:  
-  method: POST
+  method: GET
   url: /game/{gameId}/levels
   format: application/json  
   params:
