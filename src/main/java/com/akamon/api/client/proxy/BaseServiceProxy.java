@@ -12,6 +12,8 @@ import com.akamon.api.client.service.imp.http.JsonCallableResponse;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import org.apache.http.concurrent.FutureCallback;
+
 /**
  * Base class to implement the operation proxy objects
  * @author Miguel Angel Garcia
@@ -56,6 +58,41 @@ public abstract class BaseServiceProxy  {
         
         return response;
     }            
+    
+    /**
+     * Invokes a service
+     * @param serviceCode Code of the service to call
+     * @param parameters Service invokation parameters
+     * @return Response from service
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
+    public void invokeAsync(final String serviceCode, Object[] parameters,  final FutureCallback<ICallableResponse> cb) throws ServiceDefinitionException, ServiceInvocationException {
+        ICallableService service = this.serviceFactory.loadCallableService(serviceCode);
+        
+        service.invokeAsync(parameters, new FutureCallback<ICallableResponse>() {
+
+			@Override
+			public void cancelled() {
+				cb.cancelled();
+			}
+
+			@Override
+			public void completed(ICallableResponse response) {
+				try {
+					checkServiceInternalError(serviceCode, response);
+					cb.completed(response);
+				} catch (ServiceInternalError e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void failed(Exception ex) {
+				cb.failed(ex);
+			}
+        });
+    }               
     
     private void checkServiceInternalError(String serviceCode, ICallableResponse serviceResponse) throws ServiceInternalError{
         final boolean isNotAJsonResponse = ! (serviceResponse instanceof JsonCallableResponse);

@@ -1,5 +1,6 @@
 package com.akamon.api.client.service.imp.http;
 
+import com.akamon.api.client.net.HttpAsyncClient;
 import com.akamon.api.client.net.HttpClient;
 import com.akamon.api.client.net.HttpResponseData;
 import com.akamon.api.client.security.AuthData;
@@ -21,6 +22,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.NameValuePair;
+import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -220,6 +222,65 @@ public class RemoteHttpCallableService implements IRemoteHttpCallableService {
         
         return callableResponse;    
     }
+    
+    /**
+     * Performs the http invokation
+     * @param invokationData Data to send with the request
+     * @return Response obtained from server
+     * @throws ServiceDefinitionException
+     * @throws ServiceInvocationException 
+     */
+    @Override
+    public void invokeAsync(Object[] invokationData, final FutureCallback<ICallableResponse> cb) throws ServiceDefinitionException, ServiceInvocationException{
+      
+        try {               
+            NameValuePair[] httpParams = buildHttpInvokationParameters(invokationData);                         
+            String serviceUrl = replaceUrlWithRouteParams(getUrl(), httpParams);                                   
+            
+            HttpAsyncClient client = new HttpAsyncClient(getAppCode(), getAppToken(), this.logger);
+
+            client.execute(serviceUrl, getHttpMethod(), httpParams, new FutureCallback<HttpResponseData>() {
+
+				@Override
+				public void cancelled() {
+					cb.cancelled();
+				}
+
+				@Override
+				public void completed(HttpResponseData response) {
+		            int responseCode = response.getResponseCode();
+		            String responseString = response.getResponseString();
+		            
+		            try {
+		            	ICallableResponse callableResponse = buildResponse(responseCode, responseString);
+		            	cb.completed(callableResponse);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void failed(Exception ex) {
+					cb.failed(ex);
+				}
+            });          
+            
+                                  
+        }
+        catch (ServiceDefinitionException sde){
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceDefinitionException: " + sde.getMessage(), Level.SEVERE);
+            throw sde;
+        }
+        catch (ServiceInvocationException sie){
+            log("API-client-library (invoke " + this.getServiceCode() + ") ServiceInvocationException: " + sie.getMessage(), Level.SEVERE);
+            throw sie;
+        }
+        catch (Exception e){
+            log("API-client-library (invoke " + this.getServiceCode() + ") " + e.getClass().getName() + ": " + e.getMessage(), Level.SEVERE);
+            throw new ServiceInvocationException(this.getServiceCode(), e);
+        }        
+        
+    }    
     
     private ICallableResponse buildResponse(int responseCode, String responseString) throws Exception
     {
